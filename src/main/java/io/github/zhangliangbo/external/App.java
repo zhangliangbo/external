@@ -8,9 +8,9 @@ import java.util.Properties;
  * Hello world!
  */
 public class App {
-    public static void main(String[] args) throws IOException {
-        System.out.println(System.getProperty("os.name"));
-        System.out.println(System.getProperty("user.dir"));
+    public static void main(String[] args) throws Exception {
+        String execute = ET.git.execute("help", "branch");
+        System.out.println(execute);
         int read = System.in.read();
         System.out.println(read);
     }
