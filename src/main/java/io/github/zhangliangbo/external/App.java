@@ -9,7 +9,7 @@ import java.util.Properties;
  */
 public class App {
     public static void main(String[] args) throws Exception {
-        String execute = ET.git.execute("help", "branch");
+        String execute = ET.scoop.execute("help");
         System.out.println(execute);
         int read = System.in.read();
         System.out.println(read);

@@ -25,7 +25,6 @@ public abstract class AbstractExternalExecutable implements ExternalExecutable {
         PumpStreamHandler handler = new PumpStreamHandler(log);
         executor.setStreamHandler(handler);
         executor.execute(commandLine);
-        executor.wait();
         return null;
     }
 }
