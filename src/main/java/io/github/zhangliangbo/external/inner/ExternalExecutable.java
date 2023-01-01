@@ -1,5 +1,7 @@
 package io.github.zhangliangbo.external.inner;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 /**
  * 外部程序
  *
@@ -9,5 +11,5 @@ package io.github.zhangliangbo.external.inner;
 public interface ExternalExecutable {
     String getExecutable();
 
-    String execute(String... args) throws Exception;
+    Pair<Integer, String> execute(String directory, String... args) throws Exception;
 }

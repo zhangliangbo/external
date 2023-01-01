@@ -4,6 +4,10 @@ import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.LogOutputStream;
 import org.apache.commons.exec.PumpStreamHandler;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
+
+import java.io.File;
 
 /**
  * @author zhangliangbo
@@ -11,20 +15,27 @@ import org.apache.commons.exec.PumpStreamHandler;
  */
 public abstract class AbstractExternalExecutable implements ExternalExecutable {
     @Override
-    public String execute(String... args) throws Exception {
+    public Pair<Integer, String> execute(String directory, String... args) throws Exception {
         CommandLine commandLine = new CommandLine(getExecutable());
         commandLine.addArguments(args);
+        StringBuilder stringBuilder = new StringBuilder();
+        DefaultExecutor executor = new DefaultExecutor();
         LogOutputStream log = new LogOutputStream() {
-
             @Override
             protected void processLine(String line, int logLevel) {
-                System.out.println(line);
+                stringBuilder.append(line).append("\n");
             }
         };
-        DefaultExecutor executor = new DefaultExecutor();
         PumpStreamHandler handler = new PumpStreamHandler(log);
         executor.setStreamHandler(handler);
-        executor.execute(commandLine);
-        return null;
+        if (StringUtils.isNotBlank(directory)) {
+            File file = new File(directory);
+            if (file.exists() && file.isDirectory()) {
+                executor.setWorkingDirectory(file);
+            }
+        }
+        int exitCode = executor.execute(commandLine);
+        String result = stringBuilder.toString();
+        return Pair.of(exitCode, result);
     }
 }
