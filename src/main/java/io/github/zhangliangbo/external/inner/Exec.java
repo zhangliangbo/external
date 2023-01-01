@@ -1,4 +1,4 @@
-package io.github.zhangliangbo.inner;
+package io.github.zhangliangbo.external.inner;
 
 /**
  * @author zhangliangbo
