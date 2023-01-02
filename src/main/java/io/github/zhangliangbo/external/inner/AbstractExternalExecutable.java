@@ -1,5 +1,6 @@
 package io.github.zhangliangbo.external.inner;
 
+import io.github.zhangliangbo.external.ET;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.LogOutputStream;
@@ -15,27 +16,17 @@ import java.io.File;
  */
 public abstract class AbstractExternalExecutable implements ExternalExecutable {
     @Override
-    public Pair<Integer, String> execute(String directory, String... args) throws Exception {
-        CommandLine commandLine = new CommandLine(getExecutable());
-        commandLine.addArguments(args);
-        StringBuilder stringBuilder = new StringBuilder();
-        DefaultExecutor executor = new DefaultExecutor();
-        LogOutputStream log = new LogOutputStream() {
-            @Override
-            protected void processLine(String line, int logLevel) {
-                stringBuilder.append(line).append("\n");
-            }
-        };
-        PumpStreamHandler handler = new PumpStreamHandler(log);
-        executor.setStreamHandler(handler);
-        if (StringUtils.isNotBlank(directory)) {
-            File file = new File(directory);
-            if (file.exists() && file.isDirectory()) {
-                executor.setWorkingDirectory(file);
-            }
-        }
-        int exitCode = executor.execute(commandLine);
-        String result = stringBuilder.toString();
-        return Pair.of(exitCode, result);
+    public Pair<Integer, String> execute(String directory, long timeout, String... args) throws Exception {
+        return ET.exec.execute(this, directory, timeout, args);
+    }
+
+    @Override
+    public Pair<Integer, String> execute(long timeout, String... args) throws Exception {
+        return ET.exec.execute(this, null, timeout, args);
+    }
+
+    @Override
+    public Pair<Integer, String> execute(String... args) throws Exception {
+        return ET.exec.execute(this, null, 0, args);
     }
 }
