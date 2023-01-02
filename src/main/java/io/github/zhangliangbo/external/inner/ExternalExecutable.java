@@ -11,6 +11,9 @@ import java.util.function.Function;
  * @since 2023/1/1
  */
 public interface ExternalExecutable {
+
+    String getName();
+
     String getExecutable() throws Exception;
 
     void setExecutableFactory(Function<String, String> function);

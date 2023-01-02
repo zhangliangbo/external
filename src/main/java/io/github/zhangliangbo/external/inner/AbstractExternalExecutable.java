@@ -1,5 +1,6 @@
 package io.github.zhangliangbo.external.inner;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import io.github.zhangliangbo.external.ET;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -26,6 +27,13 @@ public abstract class AbstractExternalExecutable implements ExternalExecutable {
             executable = map.get(infer);
         } else {
             Function<String, String> executableFactory = getExecutableFactory();
+            if (Objects.isNull(executableFactory)) {
+                JsonNode rootNode = ET.objectMapper.readTree(getClass().getClassLoader().getResourceAsStream("executable.json"));
+                JsonNode executableNode = rootNode.get(getName());
+                if (Objects.nonNull(executableNode)) {
+                    executableFactory = os -> executableNode.get(os).asText();
+                }
+            }
             if (Objects.isNull(executableFactory)) {
                 throw new Exception("ExecutableFactory为空");
             }
