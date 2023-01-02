@@ -1,0 +1,8 @@
+{
+  "scoop": {
+    "windows": "D:\\scoop\\shims\\scoop.cmd"
+  },
+  "git": {
+    "windows": "D:\\scoop\\shims\\git.exe"
+  }
+}
