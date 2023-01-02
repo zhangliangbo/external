@@ -12,7 +12,7 @@ import java.io.IOException;
  * @since 2023/1/1
  */
 public class Exec {
-    public Pair<Integer, String> execute(ExternalExecutable executable, String directory, long timeout, String... args) throws IOException {
+    public Pair<Integer, String> execute(ExternalExecutable executable, String directory, long timeout, String... args) throws Exception {
         CommandLine commandLine = new CommandLine(executable.getExecutable());
         commandLine.addArguments(args);
         StringBuilder stringBuilder = new StringBuilder();
