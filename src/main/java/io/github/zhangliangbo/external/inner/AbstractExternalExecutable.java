@@ -28,7 +28,7 @@ public abstract class AbstractExternalExecutable implements ExternalExecutable {
         } else {
             Function<String, String> executableFactory = getExecutableFactory();
             if (Objects.isNull(executableFactory)) {
-                JsonNode rootNode = ET.objectMapper.readTree(getClass().getClassLoader().getResourceAsStream("executable.json"));
+                JsonNode rootNode = ET.objectMapper.readTree(ClassLoader.getSystemResourceAsStream("executable.json"));
                 JsonNode executableNode = rootNode.get(getName());
                 if (Objects.nonNull(executableNode)) {
                     executableFactory = os -> executableNode.get(os).asText();

@@ -194,6 +194,7 @@
                             <fallback>false</fallback>
                             <verbose>true</verbose>
                             <requiredVersion>22.1.0</requiredVersion>
+                            <buildArgs>-H:IncludeResources=".*json$"</buildArgs>
                         </configuration>
                     </plugin>
                 </plugins>
