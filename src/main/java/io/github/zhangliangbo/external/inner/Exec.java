@@ -6,14 +6,20 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
 /**
  * @author zhangliangbo
  * @since 2023/1/1
  */
 public class Exec {
-    public Pair<Integer, String> execute(ExternalExecutable executable, String directory, long timeout, String... args) throws Exception {
-        CommandLine commandLine = new CommandLine(executable.getExecutable());
+
+    public Pair<Integer, String> execute(Map<String, String> env, String executable, String directory, long timeout, String... args) throws Exception {
+        CommandLine commandLine = new CommandLine(executable);
+        return execute(env, commandLine, directory, timeout, args);
+    }
+
+    private Pair<Integer, String> execute(Map<String, String> env, CommandLine commandLine, String directory, long timeout, String... args) throws IOException {
         commandLine.addArguments(args);
         StringBuilder stringBuilder = new StringBuilder();
         DefaultExecutor executor = new DefaultExecutor();
@@ -35,8 +41,9 @@ public class Exec {
             ExecuteWatchdog executeWatchdog = new ExecuteWatchdog(timeout);
             executor.setWatchdog(executeWatchdog);
         }
-        int exitCode = executor.execute(commandLine);
+        int exitCode = executor.execute(commandLine, env);
         String result = stringBuilder.toString();
         return Pair.of(exitCode, result);
     }
+
 }

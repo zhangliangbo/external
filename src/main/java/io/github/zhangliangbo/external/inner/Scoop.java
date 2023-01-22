@@ -10,13 +10,14 @@ import org.apache.commons.lang3.tuple.Pair;
  * @since 2023/1/1
  */
 public class Scoop extends AbstractExternalExecutable {
+
     @Override
     public String getName() {
         return "scoop";
     }
 
     public JsonNode apps() throws Exception {
-        Pair<Integer, String> list = execute("list");
+        Pair<Integer, String> list = execute(null, null, 0, "list");
         return new ObjectNode(JsonNodeFactory.instance);
     }
 

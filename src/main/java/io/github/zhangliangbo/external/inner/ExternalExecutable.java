@@ -2,6 +2,8 @@ package io.github.zhangliangbo.external.inner;
 
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.io.File;
+import java.util.Map;
 import java.util.function.Function;
 
 /**
@@ -16,13 +18,13 @@ public interface ExternalExecutable {
 
     String getExecutable() throws Exception;
 
-    void setExecutableFactory(Function<String, String> function);
+    String getExecutable(String name) throws Exception;
 
-    Function<String, String> getExecutableFactory();
+    void setExecutableFactory(Function<String, File> function);
 
-    Pair<Integer, String> execute(String directory, long timeout, String... args) throws Exception;
+    Function<String, File> getExecutableFactory();
 
-    Pair<Integer, String> execute(long timeout, String... args) throws Exception;
+    Pair<Integer, String> execute(Map<String, String> env, String directory, long timeout, String... args) throws Exception;
 
-    Pair<Integer, String> execute(String... args) throws Exception;
+    Pair<Integer, String> execute(Map<String, String> env, String name, String directory, long timeout, String... args) throws Exception;
 }

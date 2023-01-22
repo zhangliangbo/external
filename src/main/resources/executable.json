@@ -4,5 +4,8 @@
   },
   "git": {
     "windows": "D:\\scoop\\shims\\git.exe"
+  },
+  "kafka": {
+    "windows": "D:\\kafka_2.12-3.3.1"
   }
 }
