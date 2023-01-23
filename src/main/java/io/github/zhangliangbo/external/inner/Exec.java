@@ -26,7 +26,10 @@ public class Exec {
         LogOutputStream log = new LogOutputStream() {
             @Override
             protected void processLine(String line, int logLevel) {
-                stringBuilder.append(line).append("\n");
+                if (stringBuilder.length() > 0) {
+                    stringBuilder.append("\n");
+                }
+                stringBuilder.append(line);
             }
         };
         PumpStreamHandler handler = new PumpStreamHandler(log);
