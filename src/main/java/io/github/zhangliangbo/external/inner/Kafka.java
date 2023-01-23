@@ -2,6 +2,7 @@ package io.github.zhangliangbo.external.inner;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.text.StringEscapeUtils;
 
 import java.io.*;
 import java.nio.MappedByteBuffer;
@@ -46,10 +47,10 @@ public class Kafka extends AbstractExternalExecutable {
         return execute.getRight();
     }
 
-    public String formatStorageDirectories(String id) throws Exception {
+    public String formatStorageDirectories(String clusterId, File configFile) throws Exception {
         Pair<Integer, String> execute = execute(null, "kafka-storage",
                 null, 0,
-                "format", "-t", id, "-c", "./config/kraft/server.properties");
+                "format", "-t", clusterId, "-c", configFile.getAbsolutePath());
         return execute.getRight();
     }
 
@@ -84,7 +85,7 @@ public class Kafka extends AbstractExternalExecutable {
         return Boolean.TRUE;
     }
 
-    public boolean newServerPropertyFile(File[] files, int[] id, int[] brokerPort, int[] controllerPort) throws Exception {
+    public boolean newServerPropertyFile(File[] files, int[] id, int[] brokerPort, int[] controllerPort, File[] logs) throws Exception {
         File source = new File(getExecutableFile(), "config/kraft/server.properties");
         for (int i = 0; i < files.length; i++) {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(source));
@@ -97,7 +98,7 @@ public class Kafka extends AbstractExternalExecutable {
                 if (line.startsWith("#")) {
                     bufferedWriter.write(line);
                 } else if (line.startsWith("node.id")) {
-                    String s = line.replaceAll("(\\w+=)\\d+", "$1" + id[i]);
+                    String s = line.replaceAll("(\\w+=).*", "$1" + id[i]);
                     bufferedWriter.write(s);
                 } else if (line.startsWith("controller.quorum.voters")) {
                     List<String> list = new LinkedList<>();
@@ -116,6 +117,15 @@ public class Kafka extends AbstractExternalExecutable {
                     String value = String.format("PLAINTEXT://localhost:%s", brokerPort[i]);
                     String s = line.replaceAll("(\\w+=).*", "$1" + value);
                     bufferedWriter.write(s);
+                } else if (line.startsWith("log.dirs")) {
+                    if (!logs[i].exists()) {
+                        if (!logs[i].mkdirs()) {
+                            throw new Exception(String.format("创建目录失败%s", logs[i].getAbsolutePath()));
+                        }
+                    }
+                    String value = StringEscapeUtils.escapeJava(logs[i].getAbsolutePath().replace("\\", "\\\\"));
+                    String s = line.replaceAll("(\\w+=).*", "$1" + value);
+                    bufferedWriter.write(s);
                 } else {
                     bufferedWriter.write(line);
                 }
@@ -128,15 +138,29 @@ public class Kafka extends AbstractExternalExecutable {
     }
 
     public boolean deployKRaft() throws Exception {
-        File[] files = new File[]{
+        File[] configs = new File[]{
                 new File(getExecutableFile(), "config/kraft/server1.properties"),
                 new File(getExecutableFile(), "config/kraft/server2.properties"),
                 new File(getExecutableFile(), "config/kraft/server3.properties")
         };
         int[] id = new int[]{1, 2, 3};
         int[] brokerPort = new int[]{9092, 9093, 9094};
-        int[] controllerPort = new int[]{8082, 8083, 8084};
-        return newServerPropertyFile(files, id, brokerPort, controllerPort);
+        int[] controllerPort = new int[]{8092, 8093, 8094};
+        File[] logs = new File[]{
+                new File(getExecutableFile(), "log/log1"),
+                new File(getExecutableFile(), "log/log2"),
+                new File(getExecutableFile(), "log/log3")
+        };
+        boolean res = newServerPropertyFile(configs, id, brokerPort, controllerPort, logs);
+        if (!res) {
+            throw new Exception("创建配置文件失败");
+        }
+        String clusterID = generateClusterID();
+        System.out.println(clusterID);
+        for (File file : configs) {
+            System.out.println(formatStorageDirectories(clusterID, file));
+        }
+        return true;
     }
 
 }
