@@ -19,7 +19,7 @@ public abstract class AbstractExternalExecutable implements ExternalExecutable {
     private final Map<OsType, File> map = new HashMap<>();
     private Function<String, File> factory;
 
-    private File getExecutableFile() throws Exception {
+    protected File getExecutableFile() throws Exception {
         OsType infer = OsType.infer();
         File executable;
         if (map.containsKey(infer)) {

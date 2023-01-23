@@ -3,11 +3,11 @@ package io.github.zhangliangbo.external.inner;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.RandomAccessFile;
+import java.io.*;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @author zhangliangbo
@@ -70,17 +70,73 @@ public class Kafka extends AbstractExternalExecutable {
                 String line = new String(bytes);
                 if (line.startsWith(key)) {
                     byte[] update = value.getBytes();
+                    int start = equalSignPos + 1;
                     for (int j = 0; j < update.length; j++) {
-                        mappedByteBuffer.put(equalSignPos + 1 + j, update[j]);
+                        mappedByteBuffer.put(start + j, update[j]);
                     }
-                    mappedByteBuffer.force();
                     break;
                 }
                 lineStart = i;
             }
         }
+        mappedByteBuffer.force();
         randomAccessFile.close();
         return Boolean.TRUE;
+    }
+
+    public boolean newServerPropertyFile(File[] files, int[] id, int[] brokerPort, int[] controllerPort) throws Exception {
+        File source = new File(getExecutableFile(), "config/kraft/server.properties");
+        for (int i = 0; i < files.length; i++) {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(source));
+            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(files[i]));
+            while (true) {
+                String line = bufferedReader.readLine();
+                if (line == null) {
+                    break;
+                }
+                if (line.startsWith("#")) {
+                    bufferedWriter.write(line);
+                } else if (line.startsWith("node.id")) {
+                    String s = line.replaceAll("(\\w+=)\\d+", "$1" + id[i]);
+                    bufferedWriter.write(s);
+                } else if (line.startsWith("controller.quorum.voters")) {
+                    List<String> list = new LinkedList<>();
+                    for (int j = 0; j < id.length; j++) {
+                        String one = id[j] + "@localhost:" + controllerPort[j];
+                        list.add(one);
+                    }
+                    String value = String.join(",", list);
+                    String s = line.replaceAll("(\\w+=).*", "$1" + value);
+                    bufferedWriter.write(s);
+                } else if (line.startsWith("listeners")) {
+                    String value = String.format("PLAINTEXT://:%s,CONTROLLER://:%s", brokerPort[i], controllerPort[i]);
+                    String s = line.replaceAll("(\\w+=).*", "$1" + value);
+                    bufferedWriter.write(s);
+                } else if (line.startsWith("advertised.listeners")) {
+                    String value = String.format("PLAINTEXT://localhost:%s", brokerPort[i]);
+                    String s = line.replaceAll("(\\w+=).*", "$1" + value);
+                    bufferedWriter.write(s);
+                } else {
+                    bufferedWriter.write(line);
+                }
+                bufferedWriter.write("\n");
+            }
+            bufferedWriter.close();
+            bufferedReader.close();
+        }
+        return true;
+    }
+
+    public boolean deployKRaft() throws Exception {
+        File[] files = new File[]{
+                new File(getExecutableFile(), "config/kraft/server1.properties"),
+                new File(getExecutableFile(), "config/kraft/server2.properties"),
+                new File(getExecutableFile(), "config/kraft/server3.properties")
+        };
+        int[] id = new int[]{1, 2, 3};
+        int[] brokerPort = new int[]{9092, 9093, 9094};
+        int[] controllerPort = new int[]{8082, 8083, 8084};
+        return newServerPropertyFile(files, id, brokerPort, controllerPort);
     }
 
 }
