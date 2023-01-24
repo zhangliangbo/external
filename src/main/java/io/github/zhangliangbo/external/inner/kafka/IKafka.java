@@ -112,7 +112,7 @@ public interface IKafka extends ExternalExecutable {
 
     default boolean startOneNode(File file) throws Exception {
         Pair<Integer, String> pair = execute(null,
-                getExecutable("kafka-server-start"), null, 0, file.getAbsolutePath());
+                "kafka-server-start", null, 0, file.getAbsolutePath());
         return true;
     }
 

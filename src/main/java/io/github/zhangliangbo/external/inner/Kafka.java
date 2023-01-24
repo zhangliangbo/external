@@ -35,7 +35,7 @@ public class Kafka extends AbstractExternalExecutable implements IKafka {
                 }
             }
         }
-        throw new Exception(name + "未找到");
+        throw new Exception(String.format("%s %s未找到", infer.getCode(), name));
     }
 
 }
