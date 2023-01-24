@@ -110,6 +110,12 @@ public interface IKafka extends ExternalExecutable {
         return Boolean.TRUE;
     }
 
+    default boolean startOneNode(File file) throws Exception {
+        Pair<Integer, String> pair = execute(null,
+                getExecutable("kafka-server-start"), null, 0, file.getAbsolutePath());
+        return true;
+    }
+
     default boolean deployKRaft() throws Exception {
         File[] configs = new File[]{
                 new File(getExecutableFile(), "config/kraft/server1.properties"),
@@ -119,11 +125,6 @@ public interface IKafka extends ExternalExecutable {
         int[] id = new int[]{1, 2, 3};
         int[] brokerPort = new int[]{9092, 9093, 9094};
         int[] controllerPort = new int[]{8092, 8093, 8094};
-//        File[] logs = new File[]{
-//                new File("D:\\kafka\\log1"),
-//                new File("D:\\kafka\\log2"),
-//                new File("D:\\kafka\\log3")
-//        };
         File[] logs = new File[]{
                 new File(getExecutableFile(), "data/log1"),
                 new File(getExecutableFile(), "data/log2"),
@@ -137,6 +138,9 @@ public interface IKafka extends ExternalExecutable {
         System.out.println(clusterID);
         for (File file : configs) {
             System.out.println(formatStorageDirectories(clusterID, file));
+        }
+        for (File config : configs) {
+            startOneNode(config);
         }
         return true;
     }

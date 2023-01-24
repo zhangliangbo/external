@@ -21,11 +21,13 @@ public class Exec {
 
     private Pair<Integer, String> execute(Map<String, String> env, CommandLine commandLine, String directory, long timeout, String... args) throws IOException {
         commandLine.addArguments(args);
+        System.out.println(commandLine);
         StringBuilder stringBuilder = new StringBuilder();
         DefaultExecutor executor = new DefaultExecutor();
         LogOutputStream log = new LogOutputStream() {
             @Override
             protected void processLine(String line, int logLevel) {
+                System.err.println(line);
                 if (stringBuilder.length() > 0) {
                     stringBuilder.append("\n");
                 }
@@ -44,6 +46,7 @@ public class Exec {
             ExecuteWatchdog executeWatchdog = new ExecuteWatchdog(timeout);
             executor.setWatchdog(executeWatchdog);
         }
+        executor.setExitValues(null);
         int exitCode = executor.execute(commandLine, env);
         String result = stringBuilder.toString();
         return Pair.of(exitCode, result);
