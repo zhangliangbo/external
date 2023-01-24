@@ -10,21 +10,21 @@ import java.nio.channels.FileChannel;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Function;
 
 /**
  * @author zhangliangbo
  * @since 2023/1/24
  */
 public interface IKafka extends ExternalExecutable {
+
     default String generateClusterID() throws Exception {
-        Pair<Integer, String> execute = execute(null, "kafka-storage", null, 60, "random-uuid");
+        Pair<Integer, String> execute = execute(null, "kafka-storage", null, 0, "random-uuid");
         return execute.getRight();
     }
 
     default String formatStorageDirectories(String clusterId, File configFile) throws Exception {
         Pair<Integer, String> execute = execute(null, "kafka-storage",
-                null, 60,
+                null, 0,
                 "format", "-t", clusterId, "-c", configFile.getAbsolutePath());
         return execute.getRight();
     }
@@ -113,7 +113,7 @@ public interface IKafka extends ExternalExecutable {
     }
 
     default void startOneNode(File file) throws Exception {
-        execute(null, "kafka-server-start", null, 0, file.getAbsolutePath());
+        execute(null, "kafka-server-start", null, -1, file.getAbsolutePath());
     }
 
     default boolean deployKRaft() throws Exception {
@@ -147,12 +147,9 @@ public interface IKafka extends ExternalExecutable {
                 } catch (Exception e) {
                     System.out.println("启动节点报错");
                 }
-            }).exceptionally(new Function<Throwable, Void>() {
-                @Override
-                public Void apply(Throwable throwable) {
-                    System.out.println("启动节点报错");
-                    return null;
-                }
+            }).exceptionally(throwable -> {
+                System.out.printf("启动节点报错%s\n", throwable);
+                return null;
             });
             list.add(completableFuture);
         }

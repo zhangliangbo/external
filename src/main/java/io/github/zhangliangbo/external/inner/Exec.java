@@ -27,7 +27,7 @@ public class Exec {
         LogOutputStream log = new LogOutputStream() {
             @Override
             protected void processLine(String line, int logLevel) {
-                if (timeout == 0) {
+                if (timeout == -1) {
                     //长时间运行任务，打印日志
                     System.out.println(line);
                 }
