@@ -74,14 +74,4 @@ public abstract class AbstractExternalExecutable implements ExternalExecutable {
         return factory;
     }
 
-    @Override
-    public Pair<Integer, String> execute(Map<String, String> env, String directory, long timeout, String... args) throws Exception {
-        return ET.exec.execute(env, getExecutable(), directory, timeout, args);
-    }
-
-    @Override
-    public Pair<Integer, String> execute(Map<String, String> env, String name, String directory, long timeout, String... args) throws Exception {
-        return ET.exec.execute(env, getExecutable(name), directory, timeout, args);
-    }
-
 }

@@ -1,10 +1,7 @@
 package io.github.zhangliangbo.external;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.zhangliangbo.external.inner.Exec;
-import io.github.zhangliangbo.external.inner.Git;
-import io.github.zhangliangbo.external.inner.Kafka;
-import io.github.zhangliangbo.external.inner.Scoop;
+import io.github.zhangliangbo.external.inner.*;
 
 /**
  * @author zhangliangbo
@@ -16,4 +13,5 @@ public class ET {
     public static Scoop scoop = new Scoop();
     public static Git git = new Git();
     public static Kafka kafka = new Kafka();
+    public static Wsl wsl = new Wsl();
 }
