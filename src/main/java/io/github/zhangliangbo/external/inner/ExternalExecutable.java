@@ -16,6 +16,8 @@ public interface ExternalExecutable {
 
     String getName();
 
+    File getExecutableFile() throws Exception;
+
     String getExecutable() throws Exception;
 
     String getExecutable(String name) throws Exception;
