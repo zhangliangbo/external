@@ -9,6 +9,8 @@ import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
 
 /**
  * @author zhangliangbo
@@ -16,13 +18,13 @@ import java.util.List;
  */
 public interface IKafka extends ExternalExecutable {
     default String generateClusterID() throws Exception {
-        Pair<Integer, String> execute = execute(null, "kafka-storage", null, 0, "random-uuid");
+        Pair<Integer, String> execute = execute(null, "kafka-storage", null, 60, "random-uuid");
         return execute.getRight();
     }
 
     default String formatStorageDirectories(String clusterId, File configFile) throws Exception {
         Pair<Integer, String> execute = execute(null, "kafka-storage",
-                null, 0,
+                null, 60,
                 "format", "-t", clusterId, "-c", configFile.getAbsolutePath());
         return execute.getRight();
     }
@@ -110,10 +112,8 @@ public interface IKafka extends ExternalExecutable {
         return Boolean.TRUE;
     }
 
-    default boolean startOneNode(File file) throws Exception {
-        Pair<Integer, String> pair = execute(null,
-                "kafka-server-start", null, 0, file.getAbsolutePath());
-        return true;
+    default void startOneNode(File file) throws Exception {
+        execute(null, "kafka-server-start", null, 0, file.getAbsolutePath());
     }
 
     default boolean deployKRaft() throws Exception {
@@ -139,9 +139,24 @@ public interface IKafka extends ExternalExecutable {
         for (File file : configs) {
             System.out.println(formatStorageDirectories(clusterID, file));
         }
+        List<CompletableFuture<Void>> list = new LinkedList<>();
         for (File config : configs) {
-            startOneNode(config);
+            CompletableFuture<Void> completableFuture = CompletableFuture.runAsync(() -> {
+                try {
+                    startOneNode(config);
+                } catch (Exception e) {
+                    System.out.println("启动节点报错");
+                }
+            }).exceptionally(new Function<Throwable, Void>() {
+                @Override
+                public Void apply(Throwable throwable) {
+                    System.out.println("启动节点报错");
+                    return null;
+                }
+            });
+            list.add(completableFuture);
         }
+        CompletableFuture.allOf(list.toArray(new CompletableFuture[0])).join();
         return true;
     }
 
