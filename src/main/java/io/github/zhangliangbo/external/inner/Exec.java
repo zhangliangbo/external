@@ -21,7 +21,7 @@ public class Exec {
 
     private Pair<Integer, String> execute(Map<String, String> env, CommandLine commandLine, String directory, long timeout, String... args) throws IOException {
         commandLine.addArguments(args);
-        System.out.println(commandLine);
+        System.out.println("[" + String.join(" ", commandLine.toStrings()) + "]");
         StringBuilder stringBuilder = new StringBuilder();
         DefaultExecutor executor = new DefaultExecutor();
         LogOutputStream log = new LogOutputStream() {
@@ -37,7 +37,7 @@ public class Exec {
                 stringBuilder.append(line);
             }
         };
-        PumpStreamHandler handler = new PumpStreamHandler(log);
+        PumpStreamHandler handler = new PumpStreamHandler(log, System.err, System.in);
         executor.setStreamHandler(handler);
         if (StringUtils.isNotBlank(directory)) {
             File file = new File(directory);

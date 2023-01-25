@@ -157,10 +157,82 @@ public interface IKafka extends ExternalExecutable {
         return true;
     }
 
+    default String servers() {
+        return "localhost:9092,localhost:9093,localhost:9094";
+    }
+
     default String metadataQuorum() throws Exception {
         Pair<Integer, String> pair = execute(null, "kafka-metadata-quorum", "", 0,
-                "--bootstrap-server", "localhost:9092,localhost:9093,localhost:9094",
+                "--bootstrap-server", servers(),
                 "describe", "--status");
+        return pair.getRight();
+    }
+
+    default String topics() throws Exception {
+        Pair<Integer, String> pair = execute(null, "kafka-topics", "", 0,
+                "--bootstrap-server", servers(), "--list");
+        return pair.getRight();
+    }
+
+    default String topicCreate(String name, String partitions, String replication) throws Exception {
+        Pair<Integer, String> pair = execute(null, "kafka-topics", "", 0,
+                "--bootstrap-server", servers(), "--create",
+                "--topic", name, "--partitions", partitions, "--replication-factor", replication);
+        return pair.getRight();
+    }
+
+    default String topicConfig(String name) throws Exception {
+        Pair<Integer, String> pair = execute(null, "kafka-configs", "", 0,
+                "--bootstrap-server", servers(), "--entity-type", "topics",
+                "--entity-name", name, "--describe");
+        return pair.getRight();
+    }
+
+    default String topicDelete(String name) throws Exception {
+        Pair<Integer, String> pair = execute(null, "kafka-topics", "", 0,
+                "--bootstrap-server", servers(), "--delete",
+                "--topic", name);
+        return pair.getRight();
+    }
+
+    default String topicInfo(String name) throws Exception {
+        Pair<Integer, String> pair = execute(null, "kafka-topics", "", 0,
+                "--bootstrap-server", servers(), "--topic", name, "--describe");
+        return pair.getRight();
+    }
+
+    default String producerHelp() throws Exception {
+        Pair<Integer, String> pair = execute(null, "kafka-console-producer", "", -1,
+                "--bootstrap-server", servers(), "--help");
+        return pair.getRight();
+    }
+
+    default String producer(String name) throws Exception {
+        Pair<Integer, String> pair = execute(null, "kafka-console-producer", "", -1,
+                "--bootstrap-server", servers(), "--topic", name);
+        return pair.getRight();
+    }
+
+    default String consumerHelp() throws Exception {
+        Pair<Integer, String> pair = execute(null, "kafka-console-consumer", "", 0,
+                "--bootstrap-server", servers(), "--help");
+        return pair.getRight();
+    }
+
+    default String consumer(String name, String partition, String offset) throws Exception {
+        Pair<Integer, String> pair = execute(null, "kafka-console-consumer", "", -1,
+                "--bootstrap-server", servers(),
+                "--topic", name,
+                "--partition", partition,
+                "--offset", offset);
+        return pair.getRight();
+    }
+
+    default String consumer(String name) throws Exception {
+        Pair<Integer, String> pair = execute(null, "kafka-console-consumer", "", -1,
+                "--bootstrap-server", servers(),
+                "--topic", name,
+                "--from-beginning");
         return pair.getRight();
     }
 

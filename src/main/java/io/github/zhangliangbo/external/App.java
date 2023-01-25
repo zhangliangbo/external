@@ -27,8 +27,20 @@ public class App {
         Field fieldDefinition = ET.class.getDeclaredField(name);
         fieldDefinition.setAccessible(true);
         Object fieldValue = fieldDefinition.get(ET.class);
-        Method myMethod = fieldValue.getClass().getMethod(method);
-        Object invoke = ArrayUtils.isEmpty(arg) ? myMethod.invoke(fieldValue) : myMethod.invoke(fieldValue, (Object[]) arg);
+
+        Object invoke;
+        if (ArrayUtils.isEmpty(arg)) {
+            Method myMethod = fieldValue.getClass().getMethod(method);
+            invoke = myMethod.invoke(fieldValue);
+        } else {
+            Class<?>[] cls = new Class[arg.length];
+            for (int i = 0; i < cls.length; i++) {
+                cls[i] = arg[i].getClass();
+            }
+            Method myMethod = fieldValue.getClass().getMethod(method, cls);
+            invoke = myMethod.invoke(fieldValue, (Object[]) arg);
+        }
+
         System.out.println(invoke);
     }
 }
