@@ -157,4 +157,11 @@ public interface IKafka extends ExternalExecutable {
         return true;
     }
 
+    default String metadataQuorum() throws Exception {
+        Pair<Integer, String> pair = execute(null, "kafka-metadata-quorum", "", 0,
+                "--bootstrap-server", "localhost:9092,localhost:9093,localhost:9094",
+                "describe", "--status");
+        return pair.getRight();
+    }
+
 }
