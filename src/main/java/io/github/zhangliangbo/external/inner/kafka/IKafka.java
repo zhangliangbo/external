@@ -236,4 +236,13 @@ public interface IKafka extends ExternalExecutable {
         return pair.getRight();
     }
 
+    default String connectStandalone() throws Exception {
+        File file = new File(getExecutableFile(), "config/connect-standalone.properties");
+        File source = new File(getExecutableFile(), "config/connect-file-source.properties");
+        File sink = new File(getExecutableFile(), "config/connect-file-sink.properties");
+        Pair<Integer, String> pair = execute(null, "connect-standalone", "", 0,
+                file.getAbsolutePath(), source.getAbsolutePath(), sink.getAbsolutePath());
+        return pair.getRight();
+    }
+
 }
