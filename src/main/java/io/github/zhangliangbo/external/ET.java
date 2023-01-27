@@ -14,4 +14,6 @@ public class ET {
     public static Git git = new Git();
     public static Kafka kafka = new Kafka();
     public static Wsl wsl = new Wsl();
+    public static Downloader downloader = new Downloader();
+    public static Os os = new Os();
 }
