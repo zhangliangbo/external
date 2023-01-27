@@ -16,6 +16,7 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author zhangliangbo
@@ -33,7 +34,12 @@ public class Downloader implements IDownloader {
                 downloadOnce(url, file);
                 break;
             } catch (Exception e) {
-                System.out.printf("下载报错 开始重试 %s %s\n", ++times, e);
+                System.out.printf("下载报错 1min后开始重试 %s %s\n", ++times, e);
+                try {
+                    TimeUnit.MINUTES.sleep(1);
+                } catch (InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                }
             }
         }
         return file;
