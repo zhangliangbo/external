@@ -30,11 +30,13 @@ public class App {
         int rightPos = invokeMethod.indexOf(right);
 
         String name = invokeMethod.substring(0, dotPos);
-        String method = invokeMethod.substring(dotPos + 1, leftPos);
-        String argString = invokeMethod.substring(leftPos + 1, rightPos);
+        String method = invokeMethod.substring(dotPos + 1, leftPos > -1 ? leftPos : invokeMethod.length());
         String[] arg = new String[0];
-        if (StringUtils.isNotBlank(argString)) {
-            arg = argString.split(",");
+        if (leftPos > -1 && rightPos > -1) {
+            String argString = invokeMethod.substring(leftPos + 1, rightPos);
+            if (StringUtils.isNotBlank(argString)) {
+                arg = argString.split(",");
+            }
         }
 
         Field fieldDefinition = ET.class.getDeclaredField(name);
