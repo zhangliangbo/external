@@ -24,9 +24,9 @@ public class App {
 
         String dot = ".";
         int dotPos = invokeMethod.indexOf(dot);
-        String left = "(";
+        String left = "[";
         int leftPos = invokeMethod.indexOf(left);
-        String right = ")";
+        String right = "]";
         int rightPos = invokeMethod.indexOf(right);
 
         String name = invokeMethod.substring(0, dotPos);
