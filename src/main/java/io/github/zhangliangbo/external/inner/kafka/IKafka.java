@@ -25,7 +25,7 @@ public interface IKafka extends ExternalExecutable {
     default String formatStorageDirectories(String clusterId, File configFile) throws Exception {
         Pair<Integer, String> execute = execute(null, "kafka-storage",
                 null, 0,
-                "format", "-t", clusterId, "-c", configFile.getAbsolutePath());
+                "format", "-t", clusterId, "-c", configFile.getAbsolutePath(), "--ignore-formatted");
         return execute.getRight();
     }
 

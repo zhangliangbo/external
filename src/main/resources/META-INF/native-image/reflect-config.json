@@ -1,0 +1,31 @@
+[
+{
+  "name":"com.fasterxml.jackson.databind.ext.Java7SupportImpl",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"io.github.zhangliangbo.external.ET",
+  "fields":[
+    {"name":"kafka"}, 
+    {"name":"os"}
+  ]
+},
+{
+  "name":"io.github.zhangliangbo.external.inner.Kafka"
+},
+{
+  "name":"io.github.zhangliangbo.external.inner.Os",
+  "methods":[
+    {"name":"arch","parameterTypes":[] }, 
+    {"name":"type","parameterTypes":[] }
+  ]
+},
+{
+  "name":"io.github.zhangliangbo.external.inner.kafka.IKafka",
+  "methods":[
+    {"name":"deployKRaft","parameterTypes":[] }, 
+    {"name":"topicInfo","parameterTypes":["java.lang.String"] }, 
+    {"name":"topics","parameterTypes":[] }
+  ]
+}
+]
