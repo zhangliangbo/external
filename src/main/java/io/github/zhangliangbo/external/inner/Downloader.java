@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.Duration;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -35,9 +36,10 @@ public class Downloader implements IDownloader {
                 downloadOnce(url, file);
                 break;
             } catch (Exception e) {
-                System.out.printf("\n下载报错 1min后开始重试 %s %s\n", ++times, e);
+                long second = Long.parseLong(sleepInterval);
+                System.out.printf("\n下载报错 %s后开始重试 %s %s\n", Duration.ofSeconds(second), ++times, e);
                 try {
-                    TimeUnit.SECONDS.sleep(Long.parseLong(sleepInterval));
+                    TimeUnit.SECONDS.sleep(second);
                 } catch (InterruptedException ex) {
                     Thread.currentThread().interrupt();
                 }
