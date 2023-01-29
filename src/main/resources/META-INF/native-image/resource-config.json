@@ -1,7 +1,15 @@
 {
   "resources":{
-  "includes":[{
+  "includes":[
+    {
       "pattern":"\\Qexecutable.json\\E"
-    }]},
+    }, 
+    {
+      "pattern":"\\Qmozilla/public-suffix-list.txt\\E"
+    }, 
+    {
+      "pattern":"\\Qorg/apache/hc/client5/version.properties\\E"
+    }
+  ]},
   "bundles":[]
 }
