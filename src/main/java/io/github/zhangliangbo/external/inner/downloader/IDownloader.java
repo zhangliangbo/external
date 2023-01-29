@@ -8,5 +8,7 @@ import java.io.IOException;
  * @since 2023/1/27
  */
 public interface IDownloader {
-    File download(String url) throws IOException;
+    File download(String url, String dest, String sleepInterval) throws IOException;
+
+    File download(String url, String dest) throws IOException;
 }
