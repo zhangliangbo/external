@@ -207,6 +207,12 @@
                                 </goals>
                                 <phase>test</phase>
                             </execution>
+                            <execution>
+                                <id>add-reachability-metadata</id>
+                                <goals>
+                                    <goal>add-reachability-metadata</goal>
+                                </goals>
+                            </execution>
                         </executions>
                         <configuration>
                             <imageName>${imageName}</imageName>
@@ -214,6 +220,9 @@
                             <fallback>false</fallback>
                             <verbose>true</verbose>
                             <requiredVersion>22.3.0</requiredVersion>
+                            <metadataRepository>
+                                <enabled>true</enabled>
+                            </metadataRepository>
                         </configuration>
                     </plugin>
                 </plugins>

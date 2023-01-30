@@ -81,6 +81,106 @@ public interface IKafka extends ExternalExecutable {
         return true;
     }
 
+    default boolean newControllerPropertyFile(File[] files, int[] id, int[] controllerPort, File[] logs) throws Exception {
+        File source = new File(getExecutableFile(), "config/kraft/controller.properties");
+        for (int i = 0; i < files.length; i++) {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(source));
+            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(files[i]));
+            while (true) {
+                String line = bufferedReader.readLine();
+                if (line == null) {
+                    break;
+                }
+                if (line.startsWith("#")) {
+                    bufferedWriter.write(line);
+                } else if (line.startsWith("node.id")) {
+                    String s = line.replaceAll("(\\w+=).*", "$1" + id[i]);
+                    bufferedWriter.write(s);
+                } else if (line.startsWith("controller.quorum.voters")) {
+                    List<String> list = new LinkedList<>();
+                    for (int j = 0; j < id.length; j++) {
+                        String one = id[j] + "@localhost:" + controllerPort[j];
+                        list.add(one);
+                    }
+                    String value = String.join(",", list);
+                    String s = line.replaceAll("(\\w+=).*", "$1" + value);
+                    bufferedWriter.write(s);
+                } else if (line.startsWith("listeners")) {
+                    String value = String.format("CONTROLLER://:%s", controllerPort[i]);
+                    String s = line.replaceAll("(\\w+=).*", "$1" + value);
+                    bufferedWriter.write(s);
+                } else if (line.startsWith("log.dirs")) {
+                    if (!logs[i].exists()) {
+                        if (!logs[i].mkdirs()) {
+                            throw new Exception(String.format("创建控制目录失败%s", logs[i].getAbsolutePath()));
+                        }
+                    }
+                    String value = StringEscapeUtils.escapeJava(logs[i].getAbsolutePath().replace("\\", "\\\\"));
+                    String s = line.replaceAll("(\\w+=).*", "$1" + value);
+                    bufferedWriter.write(s);
+                } else {
+                    bufferedWriter.write(line);
+                }
+                bufferedWriter.write("\n");
+            }
+            bufferedWriter.close();
+            bufferedReader.close();
+        }
+        return true;
+    }
+
+    default boolean newBrokerPropertyFile(File[] files, int[] brokerId, int[] brokerPort, int[] controllerId, int[] controllerPort, File[] logs) throws Exception {
+        File source = new File(getExecutableFile(), "config/kraft/broker.properties");
+        for (int i = 0; i < files.length; i++) {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(source));
+            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(files[i]));
+            while (true) {
+                String line = bufferedReader.readLine();
+                if (line == null) {
+                    break;
+                }
+                if (line.startsWith("#")) {
+                    bufferedWriter.write(line);
+                } else if (line.startsWith("node.id")) {
+                    String s = line.replaceAll("(\\w+=).*", "$1" + brokerId[i]);
+                    bufferedWriter.write(s);
+                } else if (line.startsWith("controller.quorum.voters")) {
+                    List<String> list = new LinkedList<>();
+                    for (int j = 0; j < controllerId.length; j++) {
+                        String one = controllerId[j] + "@localhost:" + controllerPort[j];
+                        list.add(one);
+                    }
+                    String value = String.join(",", list);
+                    String s = line.replaceAll("(\\w+=).*", "$1" + value);
+                    bufferedWriter.write(s);
+                } else if (line.startsWith("listeners")) {
+                    String value = String.format("PLAINTEXT://:%s", brokerPort[i]);
+                    String s = line.replaceAll("(\\w+=).*", "$1" + value);
+                    bufferedWriter.write(s);
+                } else if (line.startsWith("advertised.listeners")) {
+                    String value = String.format("PLAINTEXT://localhost:%s", brokerPort[i]);
+                    String s = line.replaceAll("(\\w+=).*", "$1" + value);
+                    bufferedWriter.write(s);
+                } else if (line.startsWith("log.dirs")) {
+                    if (!logs[i].exists()) {
+                        if (!logs[i].mkdirs()) {
+                            throw new Exception(String.format("创建数据目录失败%s", logs[i].getAbsolutePath()));
+                        }
+                    }
+                    String value = StringEscapeUtils.escapeJava(logs[i].getAbsolutePath().replace("\\", "\\\\"));
+                    String s = line.replaceAll("(\\w+=).*", "$1" + value);
+                    bufferedWriter.write(s);
+                } else {
+                    bufferedWriter.write(line);
+                }
+                bufferedWriter.write("\n");
+            }
+            bufferedWriter.close();
+            bufferedReader.close();
+        }
+        return true;
+    }
+
     default Boolean changeProperty(File file, String key, String value) throws IOException {
         RandomAccessFile randomAccessFile = new RandomAccessFile(file, "rw");
         FileChannel fileChannel = randomAccessFile.getChannel();
@@ -116,7 +216,7 @@ public interface IKafka extends ExternalExecutable {
         execute(null, "kafka-server-start", null, -1, file.getAbsolutePath());
     }
 
-    default boolean deployKRaft() throws Exception {
+    default void deployKRaft() throws Exception {
         File[] configs = new File[]{
                 new File(getExecutableFile(), "config/kraft/server1.properties"),
                 new File(getExecutableFile(), "config/kraft/server2.properties"),
@@ -154,7 +254,83 @@ public interface IKafka extends ExternalExecutable {
             list.add(completableFuture);
         }
         CompletableFuture.allOf(list.toArray(new CompletableFuture[0])).join();
-        return true;
+    }
+
+    default void deployKRaftMulti() throws Exception {
+        String clusterID = generateClusterID();
+        System.out.println(clusterID);
+        File[] ctrConfigs = new File[]{
+                new File(getExecutableFile(), "config/kraft/controller1.properties"),
+                new File(getExecutableFile(), "config/kraft/controller2.properties"),
+                new File(getExecutableFile(), "config/kraft/controller3.properties")
+        };
+        int[] controllerId = new int[]{1, 2, 3};
+        int[] controllerPort = new int[]{8092, 8093, 8094};
+        File[] ctrLogs = new File[]{
+                new File(getExecutableFile(), "data/ctr1"),
+                new File(getExecutableFile(), "data/ctr2"),
+                new File(getExecutableFile(), "data/ctr3")
+        };
+        boolean res = newControllerPropertyFile(ctrConfigs, controllerId, controllerPort, ctrLogs);
+        if (!res) {
+            throw new Exception("创建控制配置文件失败");
+        }
+        for (File file : ctrConfigs) {
+            System.out.println(formatStorageDirectories(clusterID, file));
+        }
+
+        List<CompletableFuture<Void>> list = new LinkedList<>();
+
+        for (File config : ctrConfigs) {
+            CompletableFuture<Void> completableFuture = CompletableFuture.runAsync(() -> {
+                try {
+                    startOneNode(config);
+                } catch (Exception e) {
+                    System.out.println("启动控制节点报错");
+                }
+            }).exceptionally(throwable -> {
+                System.out.printf("启动控制节点报错%s\n", throwable);
+                return null;
+            });
+            list.add(completableFuture);
+        }
+
+
+        File[] bkrConfigs = new File[]{
+                new File(getExecutableFile(), "config/kraft/broker1.properties"),
+                new File(getExecutableFile(), "config/kraft/broker2.properties"),
+                new File(getExecutableFile(), "config/kraft/server3.properties")
+        };
+        int[] brokerId = new int[]{4, 5, 6};
+        int[] brokerPort = new int[]{9092, 9093, 9094};
+        File[] bkrLogs = new File[]{
+                new File(getExecutableFile(), "data/bkr1"),
+                new File(getExecutableFile(), "data/bkr2"),
+                new File(getExecutableFile(), "data/bkr3")
+        };
+        res = newBrokerPropertyFile(bkrConfigs, brokerId, brokerPort, controllerId, controllerPort, bkrLogs);
+        if (!res) {
+            throw new Exception("创建数据配置文件失败");
+        }
+        for (File file : bkrConfigs) {
+            System.out.println(formatStorageDirectories(clusterID, file));
+        }
+
+        for (File config : bkrConfigs) {
+            CompletableFuture<Void> completableFuture = CompletableFuture.runAsync(() -> {
+                try {
+                    startOneNode(config);
+                } catch (Exception e) {
+                    System.out.println("启动数据节点报错");
+                }
+            }).exceptionally(throwable -> {
+                System.out.printf("启动数据节点报错%s\n", throwable);
+                return null;
+            });
+            list.add(completableFuture);
+        }
+
+        CompletableFuture.allOf(list.toArray(new CompletableFuture[0])).join();
     }
 
     default String servers() {
