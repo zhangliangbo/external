@@ -57,7 +57,7 @@ public class Kafka extends AbstractExternalExecutable {
     }
 
     public boolean newServerPropertyFile(File[] files, int[] id, int[] brokerPort, int[] controllerPort, File[] logs) throws Exception {
-        File source = new File(getExecutableFile(), "config/kraft/server.properties");
+        File source = new File(getExecutableHome(), "config/kraft/server.properties");
         for (int i = 0; i < files.length; i++) {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(source));
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(files[i]));
@@ -145,17 +145,17 @@ public class Kafka extends AbstractExternalExecutable {
 
     public boolean deployKRaft() throws Exception {
         File[] configs = new File[]{
-                new File(getExecutableFile(), "config/kraft/server1.properties"),
-                new File(getExecutableFile(), "config/kraft/server2.properties"),
-                new File(getExecutableFile(), "config/kraft/server3.properties")
+                new File(getExecutableHome(), "config/kraft/server1.properties"),
+                new File(getExecutableHome(), "config/kraft/server2.properties"),
+                new File(getExecutableHome(), "config/kraft/server3.properties")
         };
         int[] id = new int[]{1, 2, 3};
         int[] brokerPort = new int[]{9092, 9093, 9094};
         int[] controllerPort = new int[]{8092, 8093, 8094};
         File[] logs = new File[]{
-                new File(getExecutableFile(), "data/log1"),
-                new File(getExecutableFile(), "data/log2"),
-                new File(getExecutableFile(), "data/log3")
+                new File(getExecutableHome(), "data/log1"),
+                new File(getExecutableHome(), "data/log2"),
+                new File(getExecutableHome(), "data/log3")
         };
         boolean res = newServerPropertyFile(configs, id, brokerPort, controllerPort, logs);
         if (!res) {
@@ -264,9 +264,9 @@ public class Kafka extends AbstractExternalExecutable {
     }
 
     public String connectStandalone() throws Exception {
-        File file = new File(getExecutableFile(), "config/connect-standalone.properties");
-        File source = new File(getExecutableFile(), "config/connect-file-source.properties");
-        File sink = new File(getExecutableFile(), "config/connect-file-sink.properties");
+        File file = new File(getExecutableHome(), "config/connect-standalone.properties");
+        File source = new File(getExecutableHome(), "config/connect-file-source.properties");
+        File sink = new File(getExecutableHome(), "config/connect-file-sink.properties");
         Pair<Integer, String> pair = execute(null, "connect-standalone", "", 0,
                 file.getAbsolutePath(), source.getAbsolutePath(), sink.getAbsolutePath());
         return pair.getRight();
