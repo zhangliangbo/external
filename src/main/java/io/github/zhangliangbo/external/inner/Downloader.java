@@ -1,6 +1,5 @@
 package io.github.zhangliangbo.external.inner;
 
-import io.github.zhangliangbo.external.inner.downloader.IDownloader;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.hc.client5.http.fluent.Request;
 import org.apache.hc.core5.http.ClassicHttpResponse;
@@ -23,9 +22,8 @@ import java.util.concurrent.TimeUnit;
  * @author zhangliangbo
  * @since 2023/1/27
  */
-public class Downloader implements IDownloader {
+public class Downloader {
 
-    @Override
     public File download(String url, String dest, String sleepInterval) throws IOException {
         String name = FilenameUtils.getName(url);
         File destFile = new File(dest);
@@ -48,7 +46,6 @@ public class Downloader implements IDownloader {
         return file;
     }
 
-    @Override
     public File download(String url, String dest) throws IOException {
         return download(url, dest, "60");
     }
