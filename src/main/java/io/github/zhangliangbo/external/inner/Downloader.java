@@ -1,5 +1,11 @@
 package io.github.zhangliangbo.external.inner;
 
+import io.github.zhangliangbo.external.inner.downloader.ClientDownloadFileInitializer;
+import io.netty.bootstrap.Bootstrap;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelOption;
+import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.nio.NioSocketChannel;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.hc.client5.http.fluent.Request;
 import org.apache.hc.core5.http.ClassicHttpResponse;
@@ -93,6 +99,16 @@ public class Downloader {
                         return file;
                     }
                 });
+    }
+
+    private void downloadOnce2(String url, File file) throws IOException {
+        NioEventLoopGroup nioEventLoopGroup = new NioEventLoopGroup(1);
+        Bootstrap bootstrap = new Bootstrap()
+                .group(nioEventLoopGroup)
+                .channel(NioSocketChannel.class)
+                .option(ChannelOption.TCP_NODELAY, true)
+                .handler(new ClientDownloadFileInitializer());
+        ChannelFuture connect = bootstrap.connect("127.0.0.1", 8080);
     }
 
 }
