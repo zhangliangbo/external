@@ -11,5 +11,8 @@
   },
   "wsl": {
     "windows": "C:\\WINDOWS\\system32\\wsl.exe"
+  },
+  "ffmpeg": {
+    "windows": "D:\\zlb\\scoop\\shims\\ffmpeg.exe"
   }
 }
