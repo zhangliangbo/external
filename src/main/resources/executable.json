@@ -14,5 +14,8 @@
   },
   "ffmpeg": {
     "windows": "D:\\zlb\\scoop\\shims\\ffmpeg.exe"
+  },
+  "ffplay": {
+    "windows": "D:\\zlb\\scoop\\shims\\ffplay.exe"
   }
 }
