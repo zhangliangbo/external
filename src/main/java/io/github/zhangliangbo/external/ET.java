@@ -16,4 +16,6 @@ public class ET {
     public static Wsl wsl = new Wsl();
     public static Downloader downloader = new Downloader();
     public static Os os = new Os();
+    public static FFmpeg ffmpeg = new FFmpeg();
+    public static FFplay ffplay = new FFplay();
 }

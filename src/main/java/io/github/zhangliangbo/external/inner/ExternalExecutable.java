@@ -17,18 +17,18 @@ public interface ExternalExecutable {
 
     String getName();
 
-    File getExecutableFile() throws Exception;
+    File getExecutableHome() throws Exception;
 
     String getExecutable() throws Exception;
 
     String getExecutable(String name) throws Exception;
 
-    void setExecutableFactory(Function<String, File> function);
-
-    Function<String, File> getExecutableFactory();
-
     default Pair<Integer, String> execute(Map<String, String> env, String directory, long timeout, String... args) throws Exception {
         return ET.exec.execute(env, getExecutable(), directory, timeout, args);
+    }
+
+    default Pair<Integer, String> execute(String... args) throws Exception {
+        return ET.exec.execute(null, getExecutable(), null, 0, args);
     }
 
     default Pair<Integer, String> execute(Map<String, String> env, String name, String directory, long timeout, String... args) throws Exception {
