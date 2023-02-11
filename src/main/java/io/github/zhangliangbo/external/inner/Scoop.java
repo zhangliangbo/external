@@ -18,17 +18,18 @@ public class Scoop extends AbstractExternalExecutable {
         return "scoop";
     }
 
-    public JsonNode apps() throws Exception {
-        Pair<Integer, String> list = execute(null, null, 0, "list");
-        return new ObjectNode(JsonNodeFactory.instance);
+    public String apps() throws Exception {
+        Pair<Integer, String> pair = execute(null, null, 0, "list");
+        return pair.getRight();
     }
 
     public String installApp(String app) throws Exception {
         int times = 0;
         while (true) {
             try {
-                Pair<Integer, String> list = execute(null, null, 0, "install", app);
-                return list.getRight();
+                Pair<Integer, String> pair = execute(null, null, 0, "install", app);
+                System.out.println(pair);
+                return pair.getRight();
             } catch (Exception e) {
                 System.out.printf("安装报错 开始重试 %s\n", ++times);
                 TimeUnit.SECONDS.sleep(30);

@@ -4,14 +4,33 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
+  "name":"com.intellij.rt.execution.application.AppMainV2$Agent",
+  "methods":[{"name":"premain","parameterTypes":["java.lang.String","java.lang.instrument.Instrumentation"] }]
+},
+{
   "name":"io.github.zhangliangbo.external.ET",
-  "fields":[{"name":"os"}]
+  "fields":[
+    {"name":"ffmpeg"}, 
+    {"name":"os"}, 
+    {"name":"scoop"}
+  ]
+},
+{
+  "name":"io.github.zhangliangbo.external.inner.FFmpeg",
+  "methods":[{"name":"cameras","parameterTypes":[] }]
 },
 {
   "name":"io.github.zhangliangbo.external.inner.Os",
   "methods":[
     {"name":"arch","parameterTypes":[] }, 
     {"name":"type","parameterTypes":[] }
+  ]
+},
+{
+  "name":"io.github.zhangliangbo.external.inner.Scoop",
+  "methods":[
+    {"name":"apps","parameterTypes":[] }, 
+    {"name":"installApp","parameterTypes":["java.lang.String"] }
   ]
 }
 ]
