@@ -20,7 +20,7 @@ public class App {
         Options options = new Options();
         options.addOption(Option.builder("i").required().hasArg(true).longOpt("invoke").type(String.class).desc("invoke").build());
         options.addOption(Option.builder("c").hasArg(true).longOpt("config").type(String.class).desc("config").build());
-        options.addOption(Option.builder("h").hasArg(true).longOpt("home").type(String.class).desc("home").build());
+        options.addOption(Option.builder("d").hasArg(true).longOpt("dir").type(String.class).desc("directory").build());
 
         DefaultParser parser = new DefaultParser();
         CommandLine parse = parser.parse(options, args);

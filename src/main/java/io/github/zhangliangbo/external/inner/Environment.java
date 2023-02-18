@@ -22,12 +22,22 @@ public class Environment {
 
     static {
         try {
-            JsonNode rootNode = ET.objectMapper.readTree(ClassLoader.getSystemResourceAsStream("executable.json"));
-            Iterator<String> fieldNames = rootNode.fieldNames();
-            while (fieldNames.hasNext()) {
-                String next = fieldNames.next();
-                JsonNode node = rootNode.get(next);
-                configNode.set(next, node);
+            String userHome = System.getProperty("user.home");
+            System.out.println(userHome);
+            File configFile = new File(userHome, ".external.json");
+            if (configFile.exists()) {
+                JsonNode rootNode = ET.objectMapper.readTree(configFile);
+
+                String directory = rootNode.get("dir").asText();
+                setHome(directory);
+
+                JsonNode executable = rootNode.get("executable");
+                Iterator<String> fieldNames = executable.fieldNames();
+                while (fieldNames.hasNext()) {
+                    String next = fieldNames.next();
+                    JsonNode node = executable.get(next);
+                    configNode.set(next, node);
+                }
             }
         } catch (IOException e) {
             System.err.printf("加载内置配置文件报错 %s", e);

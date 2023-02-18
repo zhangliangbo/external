@@ -1,0 +1,24 @@
+{
+  "dir": "D:\\external",
+  "executable": {
+    "scoop": {
+      "windows": "D:\\scoop\\shims\\scoop.cmd"
+    },
+    "git": {
+      "windows": "D:\\scoop\\shims\\git.exe"
+    },
+    "kafka": {
+      "windows": "D:\\kafka_2.13-3.3.2",
+      "unix": "/mnt/d/kafka_2.13-3.3.2"
+    },
+    "wsl": {
+      "windows": "C:\\WINDOWS\\system32\\wsl.exe"
+    },
+    "ffmpeg": {
+      "windows": "D:\\zlb\\scoop\\shims\\ffmpeg.exe"
+    },
+    "ffplay": {
+      "windows": "D:\\zlb\\scoop\\shims\\ffplay.exe"
+    }
+  }
+}
