@@ -32,5 +32,11 @@
     {"name":"apps","parameterTypes":[] }, 
     {"name":"installApp","parameterTypes":["java.lang.String"] }
   ]
+},
+{
+  "name":"io.github.zhangliangbo.external.inner.Git",
+  "methods":[
+    {"name":"newMergeBranch","parameterTypes":["java.lang.String","java.lang.String"] }
+  ]
 }
 ]
