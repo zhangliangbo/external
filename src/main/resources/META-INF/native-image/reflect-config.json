@@ -32,7 +32,11 @@
 },
 {
   "name":"io.github.zhangliangbo.external.inner.Java",
-  "methods":[{"name":"version","parameterTypes":[] }]
+  "methods":[
+    {"name":"flags","parameterTypes":[] }, 
+    {"name":"runJar","parameterTypes":["java.lang.String","java.lang.String"] }, 
+    {"name":"version","parameterTypes":[] }
+  ]
 },
 {
   "name":"io.github.zhangliangbo.external.inner.Os",

@@ -32,4 +32,8 @@ public class Java extends AbstractExternalExecutable {
         return execute("-version");
     }
 
+    public Pair<Integer, String> flags() throws Exception {
+        return execute("-XX:+PrintFlagsFinal", "-version");
+    }
+
 }
