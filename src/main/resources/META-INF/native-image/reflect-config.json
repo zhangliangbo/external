@@ -11,14 +11,23 @@
   "name":"io.github.zhangliangbo.external.ET",
   "fields":[
     {"name":"ffmpeg"}, 
+    {"name":"git"}, 
     {"name":"os"}, 
-    {"name":"scoop"},
-    {"name":"git"}
+    {"name":"scoop"}, 
+    {"name":"wsl"}
   ]
 },
 {
   "name":"io.github.zhangliangbo.external.inner.FFmpeg",
   "methods":[{"name":"cameras","parameterTypes":[] }]
+},
+{
+  "name":"io.github.zhangliangbo.external.inner.Git",
+  "methods":[
+    {"name":"newMergeBranch","parameterTypes":["java.lang.String","java.lang.String"] }, 
+    {"name":"newMergeTo","parameterTypes":["java.lang.String"] }, 
+    {"name":"updateBranch","parameterTypes":["java.lang.String"] }
+  ]
 },
 {
   "name":"io.github.zhangliangbo.external.inner.Os",
@@ -32,14 +41,6 @@
   "methods":[
     {"name":"apps","parameterTypes":[] }, 
     {"name":"installApp","parameterTypes":["java.lang.String"] }
-  ]
-},
-{
-  "name":"io.github.zhangliangbo.external.inner.Git",
-  "methods":[
-    {"name":"newMergeBranch","parameterTypes":["java.lang.String","java.lang.String"] },
-    {"name":"newMergeTo","parameterTypes":["java.lang.String"] },
-    {"name":"updateBranch","parameterTypes":["java.lang.String"] }
   ]
 }
 ]

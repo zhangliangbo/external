@@ -10,7 +10,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.EventListener;
 
 /**
  * Hello world!
@@ -36,7 +35,7 @@ public class App {
         String left = "[";
         int leftPos = invokeMethod.indexOf(left);
         String right = "]";
-        int rightPos = invokeMethod.indexOf(right);
+        int rightPos = invokeMethod.lastIndexOf(right);
 
         String name = invokeMethod.substring(0, dotPos);
 
