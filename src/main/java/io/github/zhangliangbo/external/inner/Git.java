@@ -15,21 +15,109 @@ public class Git extends AbstractExternalExecutable {
         return "git";
     }
 
+    /**
+     * 创建一个新的合并分支
+     *
+     * @param base  基础分支
+     * @param merge 合并进来的分支
+     * @return 新分支名称
+     * @throws Exception 异常
+     */
     public String newMergeBranch(String base, String merge) throws Exception {
         Pair<Integer, String> execute = execute("checkout", merge);
         System.out.println(execute);
+        if (execute.getLeft() != 0) {
+            return null;
+        }
+
         execute = execute("pull", "--ff-only");
         System.out.println(execute);
+        if (execute.getLeft() != 0) {
+            return null;
+        }
+
+        execute = execute("rev-parse", "--short", "head");
+        System.out.println(execute);
+        if (execute.getLeft() != 0) {
+            return null;
+        }
+        String sha = execute.getRight();
+
         execute = execute("checkout", base);
         System.out.println(execute);
+        if (execute.getLeft() != 0) {
+            return null;
+        }
+
         execute = execute("pull", "--ff-only");
         System.out.println(execute);
-        String newBranchName = base + "-merge-" + merge + "-" + DateFormatUtils.format(new Date(), "yyyyMMddHHmmss");
+        if (execute.getLeft() != 0) {
+            return null;
+        }
+
+        String newBranchName = base + "-merge-" + merge + "-" + sha + "-" + DateFormatUtils.format(new Date(), "yyyyMMddHHmmss");
         execute = execute("checkout", "-b", newBranchName);
         System.out.println(execute);
+        if (execute.getLeft() != 0) {
+            return null;
+        }
+
         execute = execute("push", "--set-upstream", "origin", newBranchName);
         System.out.println(execute);
+        if (execute.getLeft() != 0) {
+            return null;
+        }
+
         return newBranchName;
+    }
+
+    /**
+     * 创建一个新的合并分支，当前分支是要合并进来的分支
+     *
+     * @param base 基础分支
+     * @return 新的合并分支
+     * @throws Exception 异常
+     */
+    public String newMergeTo(String base) throws Exception {
+        Pair<Integer, String> execute = execute("symbolic-ref", "--short", "HEAD");
+        System.out.println(execute);
+        if (execute.getLeft() != 0) {
+            return null;
+        }
+        String merge = execute.getRight();
+        return newMergeBranch(base, merge);
+    }
+
+    /**
+     * 更新其他分支并切回来
+     *
+     * @param branch 待更新分支
+     * @return 当前分支
+     * @throws Exception 异常
+     */
+    public String updateBranch(String branch) throws Exception {
+        Pair<Integer, String> execute = execute("symbolic-ref", "--short", "HEAD");
+        System.out.println(execute);
+        if (execute.getLeft() != 0) {
+            return null;
+        }
+        String current = execute.getRight();
+        execute = execute("checkout", branch);
+        System.out.println(execute);
+        if (execute.getLeft() != 0) {
+            return null;
+        }
+        execute = execute("pull", "--ff-only");
+        System.out.println(execute);
+        if (execute.getLeft() != 0) {
+            return null;
+        }
+        execute = execute("checkout", current);
+        System.out.println(execute);
+        if (execute.getLeft() != 0) {
+            return null;
+        }
+        return current;
     }
 
 }

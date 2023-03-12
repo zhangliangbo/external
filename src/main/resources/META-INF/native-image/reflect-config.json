@@ -37,7 +37,9 @@
 {
   "name":"io.github.zhangliangbo.external.inner.Git",
   "methods":[
-    {"name":"newMergeBranch","parameterTypes":["java.lang.String","java.lang.String"] }
+    {"name":"newMergeBranch","parameterTypes":["java.lang.String","java.lang.String"] },
+    {"name":"newMergeTo","parameterTypes":["java.lang.String"] },
+    {"name":"updateBranch","parameterTypes":["java.lang.String"] }
   ]
 }
 ]

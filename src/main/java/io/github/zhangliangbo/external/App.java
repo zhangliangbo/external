@@ -18,13 +18,12 @@ import java.util.EventListener;
 public class App {
     public static void main(String[] args) throws Exception {
         Options options = new Options();
-        options.addOption(Option.builder("i").required().hasArg(true).longOpt("invoke").type(String.class).desc("invoke").build());
         options.addOption(Option.builder("c").hasArg(true).longOpt("config").type(String.class).desc("config").build());
         options.addOption(Option.builder("d").hasArg(true).longOpt("dir").type(String.class).desc("directory").build());
 
         DefaultParser parser = new DefaultParser();
         CommandLine parse = parser.parse(options, args);
-        String invokeMethod = parse.getOptionValue("i");
+        String invokeMethod = parse.getArgs()[0];
         String config = parse.getOptionValue("c");
         String home = parse.getOptionValue("h");
 
