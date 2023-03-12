@@ -15,7 +15,7 @@ public class Git extends AbstractExternalExecutable {
         return "git";
     }
 
-    public void newMergeBranch(String base, String merge) throws Exception {
+    public String newMergeBranch(String base, String merge) throws Exception {
         Pair<Integer, String> execute = execute("checkout", merge);
         System.out.println(execute);
         execute = execute("pull", "--ff-only");
@@ -29,6 +29,7 @@ public class Git extends AbstractExternalExecutable {
         System.out.println(execute);
         execute = execute("push", "--set-upstream", "origin", newBranchName);
         System.out.println(execute);
+        return newBranchName;
     }
 
 }
