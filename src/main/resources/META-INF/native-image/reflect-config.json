@@ -12,6 +12,7 @@
   "fields":[
     {"name":"ffmpeg"}, 
     {"name":"git"}, 
+    {"name":"java"}, 
     {"name":"os"}, 
     {"name":"scoop"}, 
     {"name":"wsl"}
@@ -28,6 +29,10 @@
     {"name":"newMergeTo","parameterTypes":["java.lang.String"] }, 
     {"name":"updateBranch","parameterTypes":["java.lang.String"] }
   ]
+},
+{
+  "name":"io.github.zhangliangbo.external.inner.Java",
+  "methods":[{"name":"version","parameterTypes":[] }]
 },
 {
   "name":"io.github.zhangliangbo.external.inner.Os",
