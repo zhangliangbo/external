@@ -12,7 +12,8 @@
   "fields":[
     {"name":"ffmpeg"}, 
     {"name":"os"}, 
-    {"name":"scoop"}
+    {"name":"scoop"},
+    {"name":"git"}
   ]
 },
 {
