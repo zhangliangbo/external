@@ -17,18 +17,18 @@ public class Git extends AbstractExternalExecutable {
 
     public void newMergeBranch(String base, String merge) throws Exception {
         Pair<Integer, String> execute = execute("checkout", merge);
-        System.out.println(execute.getRight());
+        System.out.println(execute);
         execute = execute("pull", "--ff-only");
-        System.out.println(execute.getRight());
+        System.out.println(execute);
         execute = execute("checkout", base);
-        System.out.println(execute.getRight());
+        System.out.println(execute);
         execute = execute("pull", "--ff-only");
-        System.out.println(execute.getRight());
+        System.out.println(execute);
         String newBranchName = base + "-merge-" + merge + "-" + DateFormatUtils.format(new Date(), "yyyyMMddHHmmss");
         execute = execute("checkout", "-b", newBranchName);
-        System.out.println(execute.getRight());
+        System.out.println(execute);
         execute = execute("push", "--set-upstream", "origin", newBranchName);
-        System.out.println(execute.getRight());
+        System.out.println(execute);
     }
 
 }
