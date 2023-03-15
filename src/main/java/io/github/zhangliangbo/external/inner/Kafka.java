@@ -1,6 +1,5 @@
 package io.github.zhangliangbo.external.inner;
 
-import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.text.StringEscapeUtils;
 
@@ -32,25 +31,16 @@ public class Kafka extends AbstractExternalExecutable {
         } else {
             root = new File(directory, "bin");
         }
-        File[] files = root.listFiles();
-        if (files != null) {
-            for (File file : files) {
-                String fileName = FilenameUtils.getName(file.getAbsolutePath());
-                if (fileName.startsWith(name)) {
-                    return file.getAbsolutePath();
-                }
-            }
-        }
-        throw new Exception(String.format("%s %s未找到", infer.getCode(), name));
+        return searchExecutable(root, name);
     }
 
     public String generateClusterID() throws Exception {
-        Pair<Integer, String> execute = execute(null, "kafka-storage", null, 0, "random-uuid");
+        Pair<Integer, String> execute = executeSub(null, "kafka-storage", null, 0, "random-uuid");
         return execute.getRight();
     }
 
     public String formatStorageDirectories(String clusterId, File configFile) throws Exception {
-        Pair<Integer, String> execute = execute(null, "kafka-storage",
+        Pair<Integer, String> execute = executeSub(null, "kafka-storage",
                 null, 0,
                 "format", "-t", clusterId, "-c", configFile.getAbsolutePath(), "--ignore-formatted");
         return execute.getRight();
@@ -140,7 +130,7 @@ public class Kafka extends AbstractExternalExecutable {
     }
 
     public void startOneNode(File file) throws Exception {
-        execute(null, "kafka-server-start", null, -1, file.getAbsolutePath());
+        executeSub(null, "kafka-server-start", null, -1, file.getAbsolutePath());
     }
 
     public boolean deployKRaft() throws Exception {
@@ -189,65 +179,65 @@ public class Kafka extends AbstractExternalExecutable {
     }
 
     public String metadataQuorum() throws Exception {
-        Pair<Integer, String> pair = execute(null, "kafka-metadata-quorum", "", 0,
+        Pair<Integer, String> pair = executeSub(null, "kafka-metadata-quorum", "", 0,
                 "--bootstrap-server", servers(),
                 "describe", "--status");
         return pair.getRight();
     }
 
     public String topics() throws Exception {
-        Pair<Integer, String> pair = execute(null, "kafka-topics", "", 0,
+        Pair<Integer, String> pair = executeSub(null, "kafka-topics", "", 0,
                 "--bootstrap-server", servers(), "--list");
         return pair.getRight();
     }
 
     public String topicCreate(String name, String partitions, String replication) throws Exception {
-        Pair<Integer, String> pair = execute(null, "kafka-topics", "", 0,
+        Pair<Integer, String> pair = executeSub(null, "kafka-topics", "", 0,
                 "--bootstrap-server", servers(), "--create",
                 "--topic", name, "--partitions", partitions, "--replication-factor", replication);
         return pair.getRight();
     }
 
     public String topicConfig(String name) throws Exception {
-        Pair<Integer, String> pair = execute(null, "kafka-configs", "", 0,
+        Pair<Integer, String> pair = executeSub(null, "kafka-configs", "", 0,
                 "--bootstrap-server", servers(), "--entity-type", "topics",
                 "--entity-name", name, "--describe");
         return pair.getRight();
     }
 
     public String topicDelete(String name) throws Exception {
-        Pair<Integer, String> pair = execute(null, "kafka-topics", "", 0,
+        Pair<Integer, String> pair = executeSub(null, "kafka-topics", "", 0,
                 "--bootstrap-server", servers(), "--delete",
                 "--topic", name);
         return pair.getRight();
     }
 
     public String topicInfo(String name) throws Exception {
-        Pair<Integer, String> pair = execute(null, "kafka-topics", "", 0,
+        Pair<Integer, String> pair = executeSub(null, "kafka-topics", "", 0,
                 "--bootstrap-server", servers(), "--topic", name, "--describe");
         return pair.getRight();
     }
 
     public String producerHelp() throws Exception {
-        Pair<Integer, String> pair = execute(null, "kafka-console-producer", "", -1,
+        Pair<Integer, String> pair = executeSub(null, "kafka-console-producer", "", -1,
                 "--bootstrap-server", servers(), "--help");
         return pair.getRight();
     }
 
     public String producer(String name) throws Exception {
-        Pair<Integer, String> pair = execute(null, "kafka-console-producer", "", -1,
+        Pair<Integer, String> pair = executeSub(null, "kafka-console-producer", "", -1,
                 "--bootstrap-server", servers(), "--topic", name);
         return pair.getRight();
     }
 
     public String consumerHelp() throws Exception {
-        Pair<Integer, String> pair = execute(null, "kafka-console-consumer", "", 0,
+        Pair<Integer, String> pair = executeSub(null, "kafka-console-consumer", "", 0,
                 "--bootstrap-server", servers(), "--help");
         return pair.getRight();
     }
 
     public String consumer(String name, String partition, String offset) throws Exception {
-        Pair<Integer, String> pair = execute(null, "kafka-console-consumer", "", -1,
+        Pair<Integer, String> pair = executeSub(null, "kafka-console-consumer", "", -1,
                 "--bootstrap-server", servers(),
                 "--topic", name,
                 "--partition", partition,
@@ -256,7 +246,7 @@ public class Kafka extends AbstractExternalExecutable {
     }
 
     public String consumer(String name) throws Exception {
-        Pair<Integer, String> pair = execute(null, "kafka-console-consumer", "", -1,
+        Pair<Integer, String> pair = executeSub(null, "kafka-console-consumer", "", -1,
                 "--bootstrap-server", servers(),
                 "--topic", name,
                 "--from-beginning");
@@ -267,7 +257,7 @@ public class Kafka extends AbstractExternalExecutable {
         File file = new File(getExecutableHome(), "config/connect-standalone.properties");
         File source = new File(getExecutableHome(), "config/connect-file-source.properties");
         File sink = new File(getExecutableHome(), "config/connect-file-sink.properties");
-        Pair<Integer, String> pair = execute(null, "connect-standalone", "", 0,
+        Pair<Integer, String> pair = executeSub(null, "connect-standalone", "", 0,
                 file.getAbsolutePath(), source.getAbsolutePath(), sink.getAbsolutePath());
         return pair.getRight();
     }

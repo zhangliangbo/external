@@ -2,6 +2,7 @@ package io.github.zhangliangbo.external.inner;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import io.github.zhangliangbo.external.ET;
+import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
 import java.util.HashMap;
@@ -52,6 +53,24 @@ public abstract class AbstractExternalExecutable implements ExternalExecutable {
             throw new Exception("executable不是目录");
         }
         return executableFile.getAbsolutePath();
+    }
+
+    protected String searchExecutable(File root, String name) throws Exception {
+        File[] files = root.listFiles();
+        if (files != null) {
+            String moreDetailName = name;
+            OsType infer = OsType.infer();
+            if (infer == OsType.Windows) {
+                moreDetailName = name + ".exe";
+            }
+            for (File file : files) {
+                String fileName = FilenameUtils.getName(file.getAbsolutePath());
+                if (fileName.startsWith(moreDetailName)) {
+                    return file.getAbsolutePath();
+                }
+            }
+        }
+        throw new Exception(String.format("%s未找到", name));
     }
 
 }

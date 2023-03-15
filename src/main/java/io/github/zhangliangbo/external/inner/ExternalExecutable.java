@@ -31,8 +31,12 @@ public interface ExternalExecutable {
         return ET.exec.execute(null, getExecutable(), null, 0, args);
     }
 
-    default Pair<Integer, String> execute(Map<String, String> env, String name, String directory, long timeout, String... args) throws Exception {
+    default Pair<Integer, String> executeSub(Map<String, String> env, String name, String directory, long timeout, String... args) throws Exception {
         return ET.exec.execute(env, getExecutable(name), directory, timeout, args);
+    }
+
+    default Pair<Integer, String> executeSub(String name, String... args) throws Exception {
+        return ET.exec.execute(null, getExecutable(name), null, 0, args);
     }
 
 }

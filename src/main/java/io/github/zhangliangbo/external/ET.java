@@ -18,5 +18,5 @@ public class ET {
     public static Os os = new Os();
     public static FFmpeg ffmpeg = new FFmpeg();
     public static FFplay ffplay = new FFplay();
-    public static Java java = new Java();
+    public static Jdk java = new Jdk();
 }
