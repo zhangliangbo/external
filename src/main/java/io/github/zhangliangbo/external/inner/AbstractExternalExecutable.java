@@ -1,14 +1,9 @@
 package io.github.zhangliangbo.external.inner;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import io.github.zhangliangbo.external.ET;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.function.Function;
+import java.util.*;
 
 /**
  * @author zhangliangbo
@@ -58,14 +53,15 @@ public abstract class AbstractExternalExecutable implements ExternalExecutable {
     protected String searchExecutable(File root, String name) throws Exception {
         File[] files = root.listFiles();
         if (files != null) {
-            String moreDetailName = name;
+            List<String> extensions = new LinkedList<>();
             OsType infer = OsType.infer();
             if (infer == OsType.Windows) {
-                moreDetailName = name + ".exe";
+                extensions.add(".exe");
+                extensions.add(".cmd");
             }
             for (File file : files) {
                 String fileName = FilenameUtils.getName(file.getAbsolutePath());
-                if (fileName.startsWith(moreDetailName)) {
+                if (fileName.startsWith(name) && (extensions.isEmpty() || extensions.stream().anyMatch(fileName::endsWith))) {
                     return file.getAbsolutePath();
                 }
             }
