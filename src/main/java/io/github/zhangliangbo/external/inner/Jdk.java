@@ -46,4 +46,20 @@ public class Jdk extends AbstractExternalExecutable {
         return executeSub("jcmd", "-l");
     }
 
+    public Pair<Integer, String> listProcessCommand(String pid) throws Exception {
+        return executeSub("jcmd", pid);
+    }
+
+    public Pair<Integer, String> processCommandHelp(String pid, String command) throws Exception {
+        return executeSub("jcmd", pid, "help", command);
+    }
+
+    public Pair<Integer, String> processCommand(String pid, String command) throws Exception {
+        return executeSub("jcmd", pid, command);
+    }
+
+    public Pair<Integer, String> processCommandFlag(String pid) throws Exception {
+        return executeSub("jcmd", pid, "VM.flags");
+    }
+
 }
