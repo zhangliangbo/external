@@ -45,5 +45,16 @@ public class Node extends AbstractExternalExecutable {
         return executeSub("npm", "install", "-g", "cnpm", "--registry=https://registry.npmmirror.com");
     }
 
+    public Pair<Integer, String> installVueCli() throws Exception {
+        Pair<Integer, String> pair = executeSub("npm", "config", "get", "prefix");
+        if (pair.getLeft() != 0) {
+            return null;
+        }
+        String global = pair.getRight();
+        File root = new File(global);
+        String cnpm = searchExecutable(root, "cnpm");
+        return executeRaw(cnpm, "i", "@vue/cli", "-g");
+    }
+
 
 }

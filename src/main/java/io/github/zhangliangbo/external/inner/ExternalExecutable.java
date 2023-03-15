@@ -5,7 +5,6 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.File;
 import java.util.Map;
-import java.util.function.Function;
 
 /**
  * 外部程序
@@ -37,6 +36,14 @@ public interface ExternalExecutable {
 
     default Pair<Integer, String> executeSub(String name, String... args) throws Exception {
         return ET.exec.execute(null, getExecutable(name), null, 0, args);
+    }
+
+    default Pair<Integer, String> executeRaw(Map<String, String> env, String name, String directory, long timeout, String... args) throws Exception {
+        return ET.exec.execute(env, name, directory, timeout, args);
+    }
+
+    default Pair<Integer, String> executeRaw(String name, String... args) throws Exception {
+        return ET.exec.execute(null, name, null, 0, args);
     }
 
 }
