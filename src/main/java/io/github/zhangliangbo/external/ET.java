@@ -19,4 +19,5 @@ public class ET {
     public static FFmpeg ffmpeg = new FFmpeg();
     public static FFplay ffplay = new FFplay();
     public static Jdk jdk = new Jdk();
+    public static Node node = new Node();
 }

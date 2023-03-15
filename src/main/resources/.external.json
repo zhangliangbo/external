@@ -19,6 +19,12 @@
     },
     "ffplay": {
       "windows": "D:\\zlb\\scoop\\shims\\ffplay.exe"
+    },
+    "jdk":{
+      "windows": "D:\\zlb\\Java\\graalvm-ce-java17-22.3.1"
+    },
+    "node":{
+      "windows": "D:\\zlb\\scoop\\apps\\nodejs-lts\\18.14.0"
     }
   }
 }
