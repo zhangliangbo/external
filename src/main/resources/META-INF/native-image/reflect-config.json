@@ -12,7 +12,7 @@
   "fields":[
     {"name":"ffmpeg"}, 
     {"name":"git"}, 
-    {"name":"java"}, 
+    {"name":"jdk"},
     {"name":"os"}, 
     {"name":"scoop"}, 
     {"name":"wsl"}

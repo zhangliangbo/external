@@ -42,4 +42,8 @@ public class Jdk extends AbstractExternalExecutable {
         return executeSub("java", "-XX:+PrintFlagsFinal", "-version");
     }
 
+    public Pair<Integer, String> listProcess() throws Exception {
+        return executeSub("jcmd", "-l");
+    }
+
 }
