@@ -8,6 +8,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
 import java.io.StringReader;
 import java.util.LinkedList;
 import java.util.List;
@@ -47,6 +48,35 @@ public class Jdk extends AbstractExternalExecutable {
 
     public Pair<Integer, JsonNode> flagsFinal() throws Exception {
         Pair<Integer, String> pair = executeSub("java", "-XX:+PrintFlagsFinal", "-version");
+        return processFlags(pair);
+    }
+
+    public Pair<Integer, String> listProcess() throws Exception {
+        return executeSub("jcmd", "-l");
+    }
+
+    public Pair<Integer, String> listProcessCommand(String pid) throws Exception {
+        return executeSub("jcmd", pid);
+    }
+
+    public Pair<Integer, String> processCommandHelp(String pid, String command) throws Exception {
+        return executeSub("jcmd", pid, "help", command);
+    }
+
+    public Pair<Integer, String> processCommand(String pid, String command) throws Exception {
+        return executeSub("jcmd", pid, command);
+    }
+
+    public Pair<Integer, String> processCommandFlag(String pid) throws Exception {
+        return executeSub("jcmd", pid, "VM.flags");
+    }
+
+    public Pair<Integer, JsonNode> flagsInitial() throws Exception {
+        Pair<Integer, String> pair = executeSub("java", "-XX:+PrintFlagsInitial", "-version");
+        return processFlags(pair);
+    }
+
+    private Pair<Integer, JsonNode> processFlags(Pair<Integer, String> pair) throws IOException {
         if (pair.getKey() != 0) {
             return null;
         }
@@ -83,24 +113,18 @@ public class Jdk extends AbstractExternalExecutable {
         return Pair.of(pair.getLeft(), ans);
     }
 
-    public Pair<Integer, String> listProcess() throws Exception {
-        return executeSub("jcmd", "-l");
-    }
-
-    public Pair<Integer, String> listProcessCommand(String pid) throws Exception {
-        return executeSub("jcmd", pid);
-    }
-
-    public Pair<Integer, String> processCommandHelp(String pid, String command) throws Exception {
-        return executeSub("jcmd", pid, "help", command);
-    }
-
-    public Pair<Integer, String> processCommand(String pid, String command) throws Exception {
-        return executeSub("jcmd", pid, command);
-    }
-
-    public Pair<Integer, String> processCommandFlag(String pid) throws Exception {
-        return executeSub("jcmd", pid, "VM.flags");
+    public Pair<Integer, JsonNode> commandLineFlags() throws Exception {
+        Pair<Integer, String> pair = executeSub("java", "-XX:+PrintCommandLineFlags", "-version");
+        if (pair.getKey() != 0) {
+            return null;
+        }
+        ArrayNode arrayNode = new ArrayNode(JsonNodeFactory.instance);
+        String value = pair.getValue();
+        String[] split = value.split(" +");
+        for (String s : split) {
+            arrayNode.add(s);
+        }
+        return Pair.of(pair.getLeft(), arrayNode);
     }
 
 }
