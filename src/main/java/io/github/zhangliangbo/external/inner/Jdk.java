@@ -1,10 +1,17 @@
 package io.github.zhangliangbo.external.inner;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.StringReader;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author zhangliangbo
@@ -38,8 +45,42 @@ public class Jdk extends AbstractExternalExecutable {
         return executeSub("java", "-version");
     }
 
-    public Pair<Integer, String> flags() throws Exception {
-        return executeSub("java", "-XX:+PrintFlagsFinal", "-version");
+    public Pair<Integer, JsonNode> flagsFinal() throws Exception {
+        Pair<Integer, String> pair = executeSub("java", "-XX:+PrintFlagsFinal", "-version");
+        if (pair.getKey() != 0) {
+            return null;
+        }
+        String data = pair.getValue();
+        StringReader stringReader = new StringReader(data);
+        BufferedReader bufferedReader = new BufferedReader(stringReader);
+
+        ObjectNode ans = new ObjectNode(JsonNodeFactory.instance);
+        ArrayNode arrayNode = new ArrayNode(JsonNodeFactory.instance);
+        String name = "flags";
+
+        String line = bufferedReader.readLine();
+        while (Objects.nonNull(line)) {
+            if (line.contains("[") || line.contains("]")) {
+                name = line;
+            } else {
+                String[] split = line.trim().split(" +", 5);
+                ObjectNode objectNode = new ObjectNode(JsonNodeFactory.instance);
+                objectNode.put("type", split[0]);
+                objectNode.put("flag", split[1]);
+                objectNode.put("symbol", split[2]);
+                if (split.length == 4) {
+                    objectNode.put("value", "");
+                    objectNode.put("extra", split[3]);
+                } else {
+                    objectNode.put("value", split[3]);
+                    objectNode.put("extra", split[4]);
+                }
+                arrayNode.add(objectNode);
+            }
+            line = bufferedReader.readLine();
+        }
+        ans.set(name, arrayNode);
+        return Pair.of(pair.getLeft(), ans);
     }
 
     public Pair<Integer, String> listProcess() throws Exception {

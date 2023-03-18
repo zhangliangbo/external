@@ -61,7 +61,14 @@ public abstract class AbstractExternalExecutable implements ExternalExecutable {
             }
             for (File file : files) {
                 String fileName = FilenameUtils.getName(file.getAbsolutePath());
-                if (fileName.startsWith(name) && (extensions.isEmpty() || extensions.stream().anyMatch(fileName::endsWith))) {
+                boolean match;
+                if (extensions.isEmpty()) {
+                    match = Objects.equals(fileName, name);
+                } else {
+                    match = extensions.stream().map(t -> name + t)
+                            .anyMatch(t -> Objects.equals(t, fileName));
+                }
+                if (match) {
                     return file.getAbsolutePath();
                 }
             }

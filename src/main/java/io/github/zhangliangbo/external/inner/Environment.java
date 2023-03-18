@@ -23,7 +23,6 @@ public class Environment {
     static {
         try {
             String userHome = System.getProperty("user.home");
-            System.out.println(userHome);
             File configFile = new File(userHome, ".external.json");
             if (configFile.exists()) {
                 JsonNode rootNode = ET.objectMapper.readTree(configFile);
