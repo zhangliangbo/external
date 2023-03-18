@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.BufferedReader;
@@ -48,7 +49,7 @@ public class Jdk extends AbstractExternalExecutable {
 
     public Pair<Integer, JsonNode> flagsFinal() throws Exception {
         Pair<Integer, String> pair = executeSub("java", "-XX:+PrintFlagsFinal", "-version");
-        return processFlags(pair);
+        return processFlags(pair, null);
     }
 
     public Pair<Integer, String> listProcess() throws Exception {
@@ -73,10 +74,10 @@ public class Jdk extends AbstractExternalExecutable {
 
     public Pair<Integer, JsonNode> flagsInitial() throws Exception {
         Pair<Integer, String> pair = executeSub("java", "-XX:+PrintFlagsInitial", "-version");
-        return processFlags(pair);
+        return processFlags(pair, null);
     }
 
-    private Pair<Integer, JsonNode> processFlags(Pair<Integer, String> pair) throws IOException {
+    private Pair<Integer, JsonNode> processFlags(Pair<Integer, String> pair, String keyword) throws IOException {
         if (pair.getKey() != 0) {
             return null;
         }
@@ -94,6 +95,15 @@ public class Jdk extends AbstractExternalExecutable {
                 name = line;
             } else {
                 String[] split = line.trim().split(" +", 5);
+                String flag = split[1];
+
+                if (StringUtils.isNotBlank(keyword)) {
+                    if (!flag.toLowerCase().contains(keyword.toLowerCase())) {
+                        line = bufferedReader.readLine();
+                        continue;
+                    }
+                }
+
                 ObjectNode objectNode = new ObjectNode(JsonNodeFactory.instance);
                 objectNode.put("type", split[0]);
                 objectNode.put("flag", split[1]);
@@ -125,6 +135,16 @@ public class Jdk extends AbstractExternalExecutable {
             arrayNode.add(s);
         }
         return Pair.of(pair.getLeft(), arrayNode);
+    }
+
+    public Pair<Integer, JsonNode> flagsFinalLike(String keyword) throws Exception {
+        Pair<Integer, String> pair = executeSub("java", "-XX:+PrintFlagsFinal", "-version");
+        return processFlags(pair, keyword);
+    }
+
+    public Pair<Integer, JsonNode> flagsInitialLike(String keyword) throws Exception {
+        Pair<Integer, String> pair = executeSub("java", "-XX:+PrintFlagsInitial", "-version");
+        return processFlags(pair, keyword);
     }
 
 }
