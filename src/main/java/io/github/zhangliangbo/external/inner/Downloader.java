@@ -25,6 +25,7 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * https://projectreactor.io/docs/netty/release/reference/index.html
  * @author zhangliangbo
  * @since 2023/1/27
  */
@@ -102,6 +103,16 @@ public class Downloader {
     }
 
     private void downloadOnce2(String url, File file) throws IOException {
+        NioEventLoopGroup nioEventLoopGroup = new NioEventLoopGroup(1);
+        Bootstrap bootstrap = new Bootstrap()
+                .group(nioEventLoopGroup)
+                .channel(NioSocketChannel.class)
+                .option(ChannelOption.TCP_NODELAY, true)
+                .handler(new ClientDownloadFileInitializer());
+        ChannelFuture connect = bootstrap.connect("127.0.0.1", 8080);
+    }
+
+    private void downloadOnce3(String url, File file) throws IOException {
         NioEventLoopGroup nioEventLoopGroup = new NioEventLoopGroup(1);
         Bootstrap bootstrap = new Bootstrap()
                 .group(nioEventLoopGroup)
