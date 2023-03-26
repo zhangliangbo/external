@@ -1,34 +1,28 @@
 package io.github.zhangliangbo.external.inner;
 
-import io.github.zhangliangbo.external.inner.downloader.ClientDownloadFileInitializer;
-import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.http.HttpHeaders;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.hc.client5.http.fluent.Request;
-import org.apache.hc.core5.http.ClassicHttpResponse;
-import org.apache.hc.core5.http.HttpEntity;
-import org.apache.hc.core5.http.HttpException;
-import org.apache.hc.core5.http.io.HttpClientResponseHandler;
-import org.apache.hc.core5.util.Timeout;
+import reactor.netty.http.client.HttpClient;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.RandomAccessFile;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.nio.channels.FileChannel;
 import java.time.Duration;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.LongAdder;
 
 /**
  * https://projectreactor.io/docs/netty/release/reference/index.html
+ *
  * @author zhangliangbo
  * @since 2023/1/27
  */
+@Slf4j
 public class Downloader {
 
     public File download(String url, String dest, String sleepInterval) throws IOException {
@@ -65,61 +59,53 @@ public class Downloader {
         return download(url, Environment.getHome().getAbsolutePath(), "60");
     }
 
-    private void downloadOnce(String url, File file) throws IOException {
-        Request.get(url)
-                .connectTimeout(Timeout.ofMinutes(1))
-                .responseTimeout(Timeout.ofMinutes(1))
-                .execute()
-                .handleResponse(new HttpClientResponseHandler<File>() {
-                    @Override
-                    public File handleResponse(ClassicHttpResponse response) throws HttpException, IOException {
-                        HttpEntity entity = response.getEntity();
-                        if (Objects.isNull(entity)) {
-                            throw new IOException("请求体为空");
-                        }
-                        long total = response.getEntity().getContentLength();
-                        long receive = 0;
-                        BigDecimal progress = BigDecimal.valueOf(receive).multiply(BigDecimal.valueOf(100)).divide(BigDecimal.valueOf(total), 2, RoundingMode.FLOOR);
-                        System.out.printf("%s/%s %s%%", receive, total, progress);
-                        InputStream content = entity.getContent();
-                        FileOutputStream fos = new FileOutputStream(file);
-                        byte[] buffer = new byte[4 * 1024];
-                        while (true) {
-                            int len = content.read(buffer);
-                            if (len < 0) {
-                                break;
-                            }
-                            fos.write(buffer, 0, len);
-                            receive += len;
-                            progress = BigDecimal.valueOf(receive).multiply(BigDecimal.valueOf(100)).divide(BigDecimal.valueOf(total), 2, RoundingMode.FLOOR);
-                            System.out.printf("\r%s/%s %s%%", receive, total, progress);
-                        }
-                        System.out.print("\n");
-                        fos.close();
-                        content.close();
-                        return file;
+    public static void main(String[] args) throws IOException {
+        downloadOnce("https://downloads.apache.org/kafka/3.4.0/kafka_2.13-3.4.0.tgz", new File("D:"));
+    }
+
+    private static void downloadOnce(String url, File file) throws IOException {
+        RandomAccessFile randomAccessFile = new RandomAccessFile(file, "rw");
+        FileChannel channel = randomAccessFile.getChannel();
+
+        LongAdder receive = new LongAdder();
+        LongAdder position = new LongAdder();
+
+        AtomicLong total = new AtomicLong(0L);
+
+        log.info("开始请求");
+
+        HttpClient.create()
+                .doOnResponse((x, y) -> {
+                    log.info("收到应答");
+
+                    HttpHeaders entries = x.responseHeaders();
+                    String contentLength = entries.getAsString("Content-Length");
+                    long l = Long.parseLong(contentLength);
+                    total.set(l);
+                    BigDecimal progress = BigDecimal.valueOf(receive.longValue()).multiply(BigDecimal.valueOf(100))
+                            .divide(BigDecimal.valueOf(total.get()), 2, RoundingMode.FLOOR);
+                    System.out.printf("%s/%s %s%%", receive, total, progress);
+                })
+                .wiretap("cute")
+                .get()
+                .uri(url)
+                .responseContent()
+                .doOnNext(t -> {
+                    try {
+                        int len = t.readableBytes();
+                        t.readBytes(channel, position.longValue(), len);
+                        position.add(len);
+                        receive.add(len);
+                        BigDecimal progress = BigDecimal.valueOf(receive.longValue()).multiply(BigDecimal.valueOf(100))
+                                .divide(BigDecimal.valueOf(total.get()), 2, RoundingMode.FLOOR);
+                        System.out.printf("\r%s/%s %s%%", receive, total, progress);
+                    } catch (IOException e) {
+                        System.err.printf("写文件报错%s\n", e.getMessage());
                     }
-                });
-    }
+                })
+                .blockLast();
 
-    private void downloadOnce2(String url, File file) throws IOException {
-        NioEventLoopGroup nioEventLoopGroup = new NioEventLoopGroup(1);
-        Bootstrap bootstrap = new Bootstrap()
-                .group(nioEventLoopGroup)
-                .channel(NioSocketChannel.class)
-                .option(ChannelOption.TCP_NODELAY, true)
-                .handler(new ClientDownloadFileInitializer());
-        ChannelFuture connect = bootstrap.connect("127.0.0.1", 8080);
-    }
-
-    private void downloadOnce3(String url, File file) throws IOException {
-        NioEventLoopGroup nioEventLoopGroup = new NioEventLoopGroup(1);
-        Bootstrap bootstrap = new Bootstrap()
-                .group(nioEventLoopGroup)
-                .channel(NioSocketChannel.class)
-                .option(ChannelOption.TCP_NODELAY, true)
-                .handler(new ClientDownloadFileInitializer());
-        ChannelFuture connect = bootstrap.connect("127.0.0.1", 8080);
+        randomAccessFile.close();
     }
 
 }
