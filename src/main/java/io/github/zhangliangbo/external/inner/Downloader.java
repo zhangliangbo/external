@@ -60,10 +60,10 @@ public class Downloader {
     }
 
     public static void main(String[] args) throws IOException {
-        downloadOnce("https://downloads.apache.org/kafka/3.4.0/kafka_2.13-3.4.0.tgz", new File("D:"));
+        new Downloader().downloadOnce("https://downloads.apache.org/kafka/3.4.0/kafka_2.13-3.4.0.tgz", new File("D:\\"));
     }
 
-    private static void downloadOnce(String url, File file) throws IOException {
+    private void downloadOnce(String url, File file) throws IOException {
         RandomAccessFile randomAccessFile = new RandomAccessFile(file, "rw");
         FileChannel channel = randomAccessFile.getChannel();
 
@@ -106,6 +106,8 @@ public class Downloader {
                 .blockLast();
 
         randomAccessFile.close();
+
+        System.out.println();
     }
 
 }
