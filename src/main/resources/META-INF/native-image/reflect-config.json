@@ -106,11 +106,23 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
+  "name":"com.sun.crypto.provider.HmacCore$HmacSHA256",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
   "name":"com.sun.crypto.provider.HmacCore$HmacSHA384",
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
+  "name":"com.sun.crypto.provider.TlsKeyMaterialGenerator",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
   "name":"com.sun.crypto.provider.TlsMasterSecretGenerator",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
+  "name":"com.sun.crypto.provider.TlsPrfGenerator$V12",
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
@@ -352,6 +364,27 @@
   ]
 },
 {
+  "name":"io.netty.internal.tcnative.CertificateCallback"
+},
+{
+  "name":"io.netty.internal.tcnative.CertificateCallbackTask"
+},
+{
+  "name":"io.netty.internal.tcnative.SSLContext"
+},
+{
+  "name":"io.netty.internal.tcnative.SSLPrivateKeyMethodDecryptTask"
+},
+{
+  "name":"io.netty.internal.tcnative.SSLPrivateKeyMethodSignTask"
+},
+{
+  "name":"io.netty.internal.tcnative.SSLPrivateKeyMethodTask"
+},
+{
+  "name":"io.netty.internal.tcnative.SSLTask"
+},
+{
   "name":"io.netty.resolver.dns.DnsNameResolver$1"
 },
 {
@@ -411,6 +444,15 @@
   "name":"java.io.IOException"
 },
 {
+  "name":"java.lang.Exception"
+},
+{
+  "name":"java.lang.IllegalArgumentException"
+},
+{
+  "name":"java.lang.NullPointerException"
+},
+{
   "name":"java.lang.OutOfMemoryError"
 },
 {
@@ -430,12 +472,19 @@
   "name":"java.lang.String"
 },
 {
+  "name":"java.lang.Throwable",
+  "methods":[{"name":"getSuppressed","parameterTypes":[] }]
+},
+{
   "name":"java.lang.management.ManagementFactory",
   "methods":[{"name":"getRuntimeMXBean","parameterTypes":[] }]
 },
 {
   "name":"java.lang.management.RuntimeMXBean",
-  "methods":[{"name":"getInputArguments","parameterTypes":[] }]
+  "methods":[
+    {"name":"getInputArguments","parameterTypes":[] }, 
+    {"name":"getName","parameterTypes":[] }
+  ]
 },
 {
   "name":"java.net.InetSocketAddress"
@@ -489,6 +538,12 @@
 },
 {
   "name":"java.security.SecurityPermission"
+},
+{
+  "name":"java.security.interfaces.ECPrivateKey"
+},
+{
+  "name":"java.security.interfaces.ECPublicKey"
 },
 {
   "name":"java.security.interfaces.RSAPrivateKey"
@@ -545,6 +600,7 @@
   "methods":[
     {"name":"channelActive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
     {"name":"channelReadComplete","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
+    {"name":"channelRegistered","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
     {"name":"userEventTriggered","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object"] }
   ]
 },

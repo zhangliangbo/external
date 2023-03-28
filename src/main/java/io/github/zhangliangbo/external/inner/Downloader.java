@@ -1,6 +1,7 @@
 package io.github.zhangliangbo.external.inner;
 
 import io.netty.handler.codec.http.HttpHeaders;
+import io.netty.resolver.DefaultAddressResolverGroup;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 import reactor.netty.http.client.HttpClient;
@@ -72,11 +73,12 @@ public class Downloader {
 
         AtomicLong total = new AtomicLong(0L);
 
-        log.info("开始请求");
+        log.info("start request");
 
         HttpClient.create()
+                .resolver(DefaultAddressResolverGroup.INSTANCE)
                 .doOnResponse((x, y) -> {
-                    log.info("收到应答");
+                    log.info("get response");
 
                     HttpHeaders entries = x.responseHeaders();
                     String contentLength = entries.getAsString("Content-Length");

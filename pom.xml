@@ -242,6 +242,7 @@
                             <fallback>false</fallback>
                             <verbose>true</verbose>
                             <requiredVersion>22.3.0</requiredVersion>
+                            <buildArgs>-H:IncludeResources=".*xml$"</buildArgs>
                             <metadataRepository>
                                 <enabled>true</enabled>
                                 <version>0.2.6</version>
