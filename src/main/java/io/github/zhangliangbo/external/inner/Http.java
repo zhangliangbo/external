@@ -3,7 +3,9 @@ package io.github.zhangliangbo.external.inner;
 import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.resolver.DefaultAddressResolverGroup;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import reactor.netty.http.client.HttpClient;
 
 import java.io.File;
@@ -24,11 +26,14 @@ import java.util.concurrent.atomic.LongAdder;
  * @since 2023/1/27
  */
 @Slf4j
-public class Downloader {
+public class Http {
 
     public File download(String url, String dest, String sleepInterval) throws IOException {
         String name = FilenameUtils.getName(url);
         File destFile = new File(dest);
+        if (destFile.isDirectory()) {
+            FileUtils.forceMkdir(destFile);
+        }
         File file = destFile.isDirectory() ? new File(destFile, name) : destFile;
         int times = 0;
         while (true) {
@@ -57,11 +62,11 @@ public class Downloader {
     }
 
     public File download(String url) throws IOException {
-        return download(url, Environment.getHome().getAbsolutePath(), "60");
+        return download(url, Environment.getHome().getAbsolutePath() + File.separator + "download", "60");
     }
 
     public static void main(String[] args) throws IOException {
-        new Downloader().downloadOnce("https://downloads.apache.org/kafka/3.4.0/kafka_2.13-3.4.0.tgz", new File("D:\\"));
+        new Http().downloadOnce("https://downloads.apache.org/kafka/3.4.0/kafka_2.13-3.4.0.tgz", new File("D:\\"));
     }
 
     private void downloadOnce(String url, File file) throws IOException {

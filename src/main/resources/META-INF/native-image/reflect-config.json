@@ -3,12 +3,6 @@
   "name":"[B"
 },
 {
-  "name":"[Ljava.lang.String;"
-},
-{
-  "name":"[Lsun.security.pkcs.SignerInfo;"
-},
-{
   "name":"ch.qos.logback.classic.encoder.PatternLayoutEncoder",
   "queryAllPublicMethods":true,
   "methods":[{"name":"<init>","parameterTypes":[] }]
@@ -106,23 +100,7 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"com.sun.crypto.provider.HmacCore$HmacSHA256",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.sun.crypto.provider.HmacCore$HmacSHA384",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.sun.crypto.provider.TlsKeyMaterialGenerator",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
   "name":"com.sun.crypto.provider.TlsMasterSecretGenerator",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"com.sun.crypto.provider.TlsPrfGenerator$V12",
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
@@ -132,22 +110,10 @@
 {
   "name":"io.github.zhangliangbo.external.ET",
   "fields":[
-    {"name":"downloader"}, 
-    {"name":"ffmpeg"}, 
     {"name":"git"}, 
-    {"name":"jdk"}, 
-    {"name":"os"}, 
-    {"name":"scoop"}, 
-    {"name":"wsl"}
+    {"name":"http"}, 
+    {"name":"os"}
   ]
-},
-{
-  "name":"io.github.zhangliangbo.external.inner.Downloader",
-  "methods":[{"name":"download","parameterTypes":["java.lang.String","java.lang.String"] }]
-},
-{
-  "name":"io.github.zhangliangbo.external.inner.FFmpeg",
-  "methods":[{"name":"cameras","parameterTypes":[] }]
 },
 {
   "name":"io.github.zhangliangbo.external.inner.Git",
@@ -158,25 +124,14 @@
   ]
 },
 {
-  "name":"io.github.zhangliangbo.external.inner.Java",
-  "methods":[
-    {"name":"flags","parameterTypes":[] }, 
-    {"name":"runJar","parameterTypes":["java.lang.String","java.lang.String"] }, 
-    {"name":"version","parameterTypes":[] }
-  ]
+  "name":"io.github.zhangliangbo.external.inner.Http",
+  "methods":[{"name":"download","parameterTypes":["java.lang.String"] }]
 },
 {
   "name":"io.github.zhangliangbo.external.inner.Os",
   "methods":[
     {"name":"arch","parameterTypes":[] }, 
     {"name":"type","parameterTypes":[] }
-  ]
-},
-{
-  "name":"io.github.zhangliangbo.external.inner.Scoop",
-  "methods":[
-    {"name":"apps","parameterTypes":[] }, 
-    {"name":"installApp","parameterTypes":["java.lang.String"] }
   ]
 },
 {
@@ -190,10 +145,6 @@
 {
   "name":"io.netty.channel.ChannelDuplexHandler",
   "methods":[{"name":"read","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }]
-},
-{
-  "name":"io.netty.channel.ChannelHandlerAdapter",
-  "methods":[{"name":"exceptionCaught","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Throwable"] }]
 },
 {
   "name":"io.netty.channel.ChannelInboundHandlerAdapter",
@@ -214,18 +165,6 @@
   "methods":[
     {"name":"channelRegistered","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
     {"name":"exceptionCaught","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Throwable"] }
-  ]
-},
-{
-  "name":"io.netty.channel.ChannelOutboundHandlerAdapter",
-  "methods":[
-    {"name":"bind","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.net.SocketAddress","io.netty.channel.ChannelPromise"] }, 
-    {"name":"close","parameterTypes":["io.netty.channel.ChannelHandlerContext","io.netty.channel.ChannelPromise"] }, 
-    {"name":"connect","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.net.SocketAddress","java.net.SocketAddress","io.netty.channel.ChannelPromise"] }, 
-    {"name":"deregister","parameterTypes":["io.netty.channel.ChannelHandlerContext","io.netty.channel.ChannelPromise"] }, 
-    {"name":"disconnect","parameterTypes":["io.netty.channel.ChannelHandlerContext","io.netty.channel.ChannelPromise"] }, 
-    {"name":"flush","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
-    {"name":"read","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }
   ]
 },
 {
@@ -296,10 +235,7 @@
   "name":"io.netty.channel.epoll.NativeDatagramPacketArray$NativeDatagramPacket"
 },
 {
-  "name":"io.netty.channel.unix.DatagramSocketAddress"
-},
-{
-  "name":"io.netty.channel.unix.DomainDatagramSocketAddress"
+  "name":"io.netty.channel.kqueue.KQueue"
 },
 {
   "name":"io.netty.channel.unix.PeerCredentials"
@@ -310,17 +246,6 @@
     {"name":"channelRead","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object"] }, 
     {"name":"userEventTriggered","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object"] }
   ]
-},
-{
-  "name":"io.netty.handler.codec.MessageToMessageDecoder",
-  "methods":[{"name":"channelRead","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object"] }]
-},
-{
-  "name":"io.netty.handler.codec.MessageToMessageEncoder",
-  "methods":[{"name":"write","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object","io.netty.channel.ChannelPromise"] }]
-},
-{
-  "name":"io.netty.handler.codec.dns.DatagramDnsQueryEncoder"
 },
 {
   "name":"io.netty.handler.codec.http.HttpClientCodec"
@@ -364,6 +289,9 @@
   ]
 },
 {
+  "name":"io.netty.incubator.channel.uring.IOUring"
+},
+{
   "name":"io.netty.internal.tcnative.CertificateCallback"
 },
 {
@@ -383,20 +311,6 @@
 },
 {
   "name":"io.netty.internal.tcnative.SSLTask"
-},
-{
-  "name":"io.netty.resolver.dns.DnsNameResolver$1"
-},
-{
-  "name":"io.netty.resolver.dns.DnsNameResolver$3"
-},
-{
-  "name":"io.netty.resolver.dns.DnsNameResolver$DnsResponseHandler",
-  "methods":[
-    {"name":"channelActive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
-    {"name":"channelRead","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object"] }, 
-    {"name":"exceptionCaught","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Throwable"] }
-  ]
 },
 {
   "name":"io.netty.util.AbstractReferenceCounted",
@@ -423,25 +337,10 @@
   "fields":[{"name":"producerIndex"}]
 },
 {
-  "name":"io.netty.util.internal.shaded.org.jctools.queues.MpscArrayQueueConsumerIndexField",
-  "fields":[{"name":"consumerIndex"}]
-},
-{
-  "name":"io.netty.util.internal.shaded.org.jctools.queues.MpscArrayQueueProducerIndexField",
-  "fields":[{"name":"producerIndex"}]
-},
-{
-  "name":"io.netty.util.internal.shaded.org.jctools.queues.MpscArrayQueueProducerLimitField",
-  "fields":[{"name":"producerLimit"}]
-},
-{
   "name":"java.io.FileDescriptor"
 },
 {
   "name":"java.io.FilePermission"
-},
-{
-  "name":"java.io.IOException"
 },
 {
   "name":"java.lang.Exception"
@@ -456,24 +355,10 @@
   "name":"java.lang.OutOfMemoryError"
 },
 {
-  "name":"java.lang.ProcessHandle",
-  "methods":[
-    {"name":"current","parameterTypes":[] }, 
-    {"name":"pid","parameterTypes":[] }
-  ]
-},
-{
-  "name":"java.lang.RuntimeException"
-},
-{
   "name":"java.lang.RuntimePermission"
 },
 {
   "name":"java.lang.String"
-},
-{
-  "name":"java.lang.Throwable",
-  "methods":[{"name":"getSuppressed","parameterTypes":[] }]
 },
 {
   "name":"java.lang.management.ManagementFactory",
@@ -487,13 +372,7 @@
   ]
 },
 {
-  "name":"java.net.InetSocketAddress"
-},
-{
   "name":"java.net.NetPermission"
-},
-{
-  "name":"java.net.PortUnreachableException"
 },
 {
   "name":"java.net.SocketPermission"
@@ -519,9 +398,6 @@
   "methods":[{"name":"<init>","parameterTypes":["long","int"] }]
 },
 {
-  "name":"java.nio.channels.ClosedChannelException"
-},
-{
   "name":"java.nio.channels.FileChannel"
 },
 {
@@ -538,21 +414,6 @@
 },
 {
   "name":"java.security.SecurityPermission"
-},
-{
-  "name":"java.security.interfaces.ECPrivateKey"
-},
-{
-  "name":"java.security.interfaces.ECPublicKey"
-},
-{
-  "name":"java.security.interfaces.RSAPrivateKey"
-},
-{
-  "name":"java.security.interfaces.RSAPublicKey"
-},
-{
-  "name":"java.util.Date"
 },
 {
   "name":"java.util.PropertyPermission"
@@ -579,6 +440,9 @@
   "methods":[{"name":"<init>","parameterTypes":["sun.security.x509.X500Name"] }]
 },
 {
+  "name":"javax.smartcardio.CardPermission"
+},
+{
   "name":"jdk.internal.misc.Unsafe",
   "methods":[{"name":"getUnsafe","parameterTypes":[] }]
 },
@@ -588,8 +452,7 @@
     {"name":"channelActive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
     {"name":"channelInactive","parameterTypes":["io.netty.channel.ChannelHandlerContext"] }, 
     {"name":"channelRead","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object"] }, 
-    {"name":"exceptionCaught","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Throwable"] }, 
-    {"name":"userEventTriggered","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Object"] }
+    {"name":"exceptionCaught","parameterTypes":["io.netty.channel.ChannelHandlerContext","java.lang.Throwable"] }
   ]
 },
 {
@@ -617,8 +480,17 @@
     {"name":"copyMemory","parameterTypes":["java.lang.Object","long","java.lang.Object","long","long"] }, 
     {"name":"getAndAddLong","parameterTypes":["java.lang.Object","long","long"] }, 
     {"name":"getAndSetObject","parameterTypes":["java.lang.Object","long","java.lang.Object"] }, 
-    {"name":"invokeCleaner","parameterTypes":["java.nio.ByteBuffer"] }, 
-    {"name":"storeFence","parameterTypes":[] }
+    {"name":"invokeCleaner","parameterTypes":["java.nio.ByteBuffer"] }
+  ]
+},
+{
+  "name":"sun.misc.VM"
+},
+{
+  "name":"sun.nio.ch.SelectorImpl",
+  "fields":[
+    {"name":"publicSelectedKeys"}, 
+    {"name":"selectedKeys"}
   ]
 },
 {
@@ -630,6 +502,10 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
+  "name":"sun.security.provider.DRBG",
+  "methods":[{"name":"<init>","parameterTypes":["java.security.SecureRandomParameters"] }]
+},
+{
   "name":"sun.security.provider.DSA$SHA224withDSA",
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
@@ -638,15 +514,7 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"sun.security.provider.JavaKeyStore$DualFormatJKS",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
   "name":"sun.security.provider.JavaKeyStore$JKS",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"sun.security.provider.NativePRNG",
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
@@ -674,10 +542,6 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"sun.security.provider.certpath.PKIXCertPathValidator",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
   "name":"sun.security.rsa.PSSParameters",
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
@@ -694,23 +558,12 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
-  "name":"sun.security.rsa.RSASignature$SHA256withRSA",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"sun.security.rsa.RSASignature$SHA384withRSA",
-  "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
   "name":"sun.security.ssl.SSLContextImpl$TLSContext",
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
   "name":"sun.security.ssl.TrustManagerFactoryImpl$PKIXFactory",
   "methods":[{"name":"<init>","parameterTypes":[] }]
-},
-{
-  "name":"sun.security.util.ObjectIdentifier"
 },
 {
   "name":"sun.security.x509.AuthorityInfoAccessExtension",
@@ -727,9 +580,6 @@
 {
   "name":"sun.security.x509.CRLDistributionPointsExtension",
   "methods":[{"name":"<init>","parameterTypes":["java.lang.Boolean","java.lang.Object"] }]
-},
-{
-  "name":"sun.security.x509.CertificateExtensions"
 },
 {
   "name":"sun.security.x509.CertificatePoliciesExtension",

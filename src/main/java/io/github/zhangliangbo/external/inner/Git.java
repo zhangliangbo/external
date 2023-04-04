@@ -120,4 +120,24 @@ public class Git extends AbstractExternalExecutable {
         return current;
     }
 
+    /**
+     * 合并后自动提交
+     *
+     * @throws Exception 异常
+     */
+    public void afterMerge() throws Exception {
+        Pair<Integer, String> execute = execute("add", ".");
+        System.out.println(execute);
+        if (execute.getLeft() != 0) {
+            return;
+        }
+        execute = execute("commit", "-m", "\"merge\"");
+        System.out.println(execute);
+        if (execute.getLeft() != 0) {
+            return;
+        }
+        execute = execute("push", "--force-with-lease");
+        System.out.println(execute);
+    }
+
 }
