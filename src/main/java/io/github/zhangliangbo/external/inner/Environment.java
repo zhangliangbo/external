@@ -22,6 +22,8 @@ public class Environment {
 
     static {
         try {
+            initExecutable();
+
             String userHome = System.getProperty("user.home");
             File configFile = new File(userHome, ".external.json");
             if (configFile.exists()) {
@@ -78,6 +80,12 @@ public class Environment {
 
     public static File getHome() {
         return home.get();
+    }
+
+    private static void initExecutable() {
+        ObjectNode jsonNode = new ObjectNode(JsonNodeFactory.instance);
+        jsonNode.put("windows", "C:\\Windows\\System32\\cmd.exe");
+        configNode.set("cmd", jsonNode);
     }
 
 }

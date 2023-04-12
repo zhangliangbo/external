@@ -20,4 +20,5 @@ public class ET {
     public static FFplay ffplay = new FFplay();
     public static Jdk jdk = new Jdk();
     public static Node node = new Node();
+    public static Cmd cmd = new Cmd();
 }

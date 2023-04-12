@@ -110,14 +110,23 @@
 {
   "name":"io.github.zhangliangbo.external.ET",
   "fields":[
+    {"name":"cmd"}, 
     {"name":"git"}, 
     {"name":"http"}, 
     {"name":"os"}
   ]
 },
 {
+  "name":"io.github.zhangliangbo.external.inner.Cmd",
+  "methods":[
+    {"name":"echo","parameterTypes":["java.lang.String"] }, 
+    {"name":"where","parameterTypes":["java.lang.String"] }
+  ]
+},
+{
   "name":"io.github.zhangliangbo.external.inner.Git",
   "methods":[
+    {"name":"afterMerge","parameterTypes":[] }, 
     {"name":"newMergeBranch","parameterTypes":["java.lang.String","java.lang.String"] }, 
     {"name":"newMergeTo","parameterTypes":["java.lang.String"] }, 
     {"name":"updateBranch","parameterTypes":["java.lang.String"] }
