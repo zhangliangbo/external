@@ -123,6 +123,7 @@
     {"name":"cmd"}, 
     {"name":"git"}, 
     {"name":"http"}, 
+    {"name":"io"}, 
     {"name":"os"}
   ]
 },
@@ -148,6 +149,13 @@
     {"name":"download","parameterTypes":["java.lang.String"] }, 
     {"name":"download","parameterTypes":["java.lang.String","java.lang.String"] }, 
     {"name":"download","parameterTypes":["java.lang.String","java.lang.String","java.lang.String"] }
+  ]
+},
+{
+  "name":"io.github.zhangliangbo.external.inner.IO",
+  "methods":[
+    {"name":"extract","parameterTypes":["java.lang.String"] }, 
+    {"name":"extract","parameterTypes":["java.lang.String","java.lang.String"] }
   ]
 },
 {

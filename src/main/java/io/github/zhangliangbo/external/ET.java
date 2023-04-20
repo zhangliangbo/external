@@ -21,4 +21,5 @@ public class ET {
     public static Jdk jdk = new Jdk();
     public static Node node = new Node();
     public static Cmd cmd = new Cmd();
+    public static IO io = new IO();
 }
