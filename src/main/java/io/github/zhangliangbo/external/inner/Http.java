@@ -5,7 +5,6 @@ import io.netty.resolver.DefaultAddressResolverGroup;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
 import reactor.netty.http.client.HttpClient;
 
 import java.io.File;
@@ -27,6 +26,19 @@ import java.util.concurrent.atomic.LongAdder;
  */
 @Slf4j
 public class Http {
+
+    private final String DEFAULT_DIR = Environment.getHome().getAbsolutePath() + File.separator + "download";
+
+    public Http() {
+        File dir = new File(DEFAULT_DIR);
+        if (!dir.exists()) {
+            try {
+                FileUtils.forceMkdir(dir);
+            } catch (IOException e) {
+                System.out.printf("创建默认下载目录报错 %s\n", e.getMessage());
+            }
+        }
+    }
 
     public File download(String url, String dest, String sleepInterval) throws IOException {
         String name = FilenameUtils.getName(url);
@@ -62,7 +74,7 @@ public class Http {
     }
 
     public File download(String url) throws IOException {
-        return download(url, Environment.getHome().getAbsolutePath() + File.separator + "download", "60");
+        return download(url, DEFAULT_DIR, "60");
     }
 
     public static void main(String[] args) throws IOException {
