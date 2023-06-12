@@ -4,10 +4,12 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.github.zhangliangbo.external.ET;
+import org.apache.commons.collections4.CollectionUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -83,9 +85,22 @@ public class Environment {
     }
 
     private static void initExecutable() {
+        //cmd
         ObjectNode jsonNode = new ObjectNode(JsonNodeFactory.instance);
-        jsonNode.put("windows", "C:\\Windows\\System32\\cmd.exe");
+        jsonNode.put(OsType.Windows.getCode(), "C:\\Windows\\System32\\cmd.exe");
         configNode.set("cmd", jsonNode);
+        //powershell
+        try {
+            List<String> powershell = new Cmd().where("powershell");
+            if (CollectionUtils.isNotEmpty(powershell)) {
+                jsonNode = new ObjectNode(JsonNodeFactory.instance);
+                jsonNode.put(OsType.Windows.getCode(), powershell.get(0));
+                configNode.set("powershell", jsonNode);
+            }
+        } catch (Exception e) {
+            //ignore
+        }
+
     }
 
 }

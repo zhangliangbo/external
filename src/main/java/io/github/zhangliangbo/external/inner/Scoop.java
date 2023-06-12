@@ -16,7 +16,12 @@ public class Scoop extends AbstractExternalExecutable {
     }
 
     public String apps() throws Exception {
-        Pair<Integer, String> pair = execute(null, null, 0, "list");
+        Pair<Integer, String> pair = execute("list");
+        return pair.getRight();
+    }
+
+    public String search(String app) throws Exception {
+        Pair<Integer, String> pair = execute("search", app);
         return pair.getRight();
     }
 
@@ -32,6 +37,10 @@ public class Scoop extends AbstractExternalExecutable {
                 TimeUnit.SECONDS.sleep(30);
             }
         }
+    }
+
+    public String installJdk() throws Exception {
+        return installApp("graalvm22-jdk17");
     }
 
 }

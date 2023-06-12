@@ -106,6 +106,10 @@
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
 {
+  "name":"com.sun.crypto.provider.HmacCore$HmacSHA256",
+  "methods":[{"name":"<init>","parameterTypes":[] }]
+},
+{
   "name":"com.sun.crypto.provider.HmacCore$HmacSHA384",
   "methods":[{"name":"<init>","parameterTypes":[] }]
 },
@@ -124,7 +128,9 @@
     {"name":"git"}, 
     {"name":"http"}, 
     {"name":"io"}, 
-    {"name":"os"}
+    {"name":"os"}, 
+    {"name":"powershell"}, 
+    {"name":"scoop"}
   ]
 },
 {
@@ -163,6 +169,18 @@
   "methods":[
     {"name":"arch","parameterTypes":[] }, 
     {"name":"type","parameterTypes":[] }
+  ]
+},
+{
+  "name":"io.github.zhangliangbo.external.inner.Powershell",
+  "methods":[{"name":"version","parameterTypes":[] }]
+},
+{
+  "name":"io.github.zhangliangbo.external.inner.Scoop",
+  "methods":[
+    {"name":"apps","parameterTypes":[] }, 
+    {"name":"installJdk","parameterTypes":[] }, 
+    {"name":"search","parameterTypes":["java.lang.String"] }
   ]
 },
 {
@@ -404,6 +422,10 @@
   "name":"java.lang.String"
 },
 {
+  "name":"java.lang.Throwable",
+  "methods":[{"name":"getSuppressed","parameterTypes":[] }]
+},
+{
   "name":"java.lang.management.ManagementFactory",
   "methods":[{"name":"getRuntimeMXBean","parameterTypes":[] }]
 },
@@ -457,6 +479,12 @@
 },
 {
   "name":"java.security.SecurityPermission"
+},
+{
+  "name":"java.security.interfaces.ECPrivateKey"
+},
+{
+  "name":"java.security.interfaces.ECPublicKey"
 },
 {
   "name":"java.security.interfaces.RSAPrivateKey"

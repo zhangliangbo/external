@@ -100,7 +100,7 @@ public class Http {
                     HttpHeaders entries = x.responseHeaders();
                     String contentLength = entries.getAsString("Content-Length");
                     long l = Long.parseLong(contentLength);
-                    total.set(l);
+                    total.set(l == 0 ? 1 : l);
                     BigDecimal progress = BigDecimal.valueOf(receive.longValue()).multiply(BigDecimal.valueOf(100))
                             .divide(BigDecimal.valueOf(total.get()), 2, RoundingMode.FLOOR);
                     System.out.printf("%s/%s %s%%", receive, total, progress);
