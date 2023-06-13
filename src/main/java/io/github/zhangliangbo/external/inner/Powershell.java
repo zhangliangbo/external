@@ -22,10 +22,15 @@ public class Powershell extends AbstractExternalExecutable {
         return execute.getRight();
     }
 
+    /**
+     * www.ipaddress.com
+     */
     public String installScoop() throws Exception {
-        Pair<Integer, String> execute = execute("[environment]::setEnvironmentVariable('SCOOP','D:\\scoop1','User')");
-        System.out.println(execute);
-        execute = execute("irm get.scoop.sh | iex");
+        Pair<Integer, String> execute = execute(
+                "Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser;" +
+                        "[environment]::setEnvironmentVariable('SCOOP','D:\\scoop1','User');" +
+                        "irm get.scoop.sh | iex"
+        );
         return execute.getRight();
     }
 
