@@ -173,7 +173,10 @@
 },
 {
   "name":"io.github.zhangliangbo.external.inner.Powershell",
-  "methods":[{"name":"version","parameterTypes":[] }]
+  "methods":[
+    {"name":"installScoop","parameterTypes":[] }, 
+    {"name":"version","parameterTypes":[] }
+  ]
 },
 {
   "name":"io.github.zhangliangbo.external.inner.Scoop",

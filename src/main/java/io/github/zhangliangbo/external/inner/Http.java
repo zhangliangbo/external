@@ -78,7 +78,7 @@ public class Http {
     }
 
     public static void main(String[] args) throws IOException {
-        new Http().downloadOnce("https://downloads.apache.org/kafka/3.4.0/kafka_2.13-3.4.0.tgz", new File("D:\\"));
+        new Http().download("https://www.nartac.com/Downloads/IISCrypto/IISCrypto.exe");
     }
 
     private void downloadOnce(String url, File file) throws IOException {
