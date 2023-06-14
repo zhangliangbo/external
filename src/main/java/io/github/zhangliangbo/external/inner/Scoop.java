@@ -31,10 +31,10 @@ public class Scoop extends AbstractExternalExecutable {
         return pair.getRight();
     }
 
-    public String installApp(String app) throws Exception {
+    public String installApp(String bucket, String app) throws Exception {
         int times = 0;
+        bucket = bucket.substring(0, 1).toUpperCase() + bucket.substring(1);
         String url = "https://ghproxy.com/https://raw.githubusercontent.com/ScoopInstaller/%s/master/bucket/%s.json";
-        String bucket = "Main";
         String path = String.format(url, bucket, app);
         while (true) {
             try {
@@ -53,7 +53,7 @@ public class Scoop extends AbstractExternalExecutable {
     }
 
     public String installJdk() throws Exception {
-        return installApp("graalvm22-jdk17");
+        return installApp("Main", "graalvm22-jdk17");
     }
 
     public List<String> bucketAll() throws Exception {
@@ -119,11 +119,6 @@ public class Scoop extends AbstractExternalExecutable {
         String value = config(key);
         Pair<Integer, String> execute = execute("config", key, "https://ghproxy.com/" + value);
         return success(execute);
-    }
-
-    public String bucket(String app) throws Exception {
-        Pair<Integer, String> execute = execute(String.format("info %s | Select -ExpandProperty Bucket", app));
-        return execute.getRight();
     }
 
 }

@@ -35,4 +35,9 @@ public class Powershell extends AbstractExternalExecutable {
         return execute.getRight();
     }
 
+    public String bucket(String app) throws Exception {
+        Pair<Integer, String> execute = execute(String.format("scoop info %s | Select -ExpandProperty Bucket", app));
+        return execute.getRight();
+    }
+
 }

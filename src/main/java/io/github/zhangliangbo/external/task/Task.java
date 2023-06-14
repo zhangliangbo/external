@@ -27,7 +27,8 @@ public class Task {
         if (CollectionUtils.isNotEmpty(git)) {
             System.out.printf("%s已安装，跳过\n", "git");
         } else {
-            result = ET.scoop.installApp("git");
+            String bucket = ET.powershell.bucket("git");
+            result = ET.scoop.installApp(bucket, "git");
             System.out.println(result);
         }
         //添加仓库
@@ -41,11 +42,9 @@ public class Task {
         if (CollectionUtils.isNotEmpty(python)) {
             System.out.printf("%s已安装，跳过\n", "anaconda3");
         } else {
-            result = ET.scoop.installApp("anaconda3");
+            String bucket = ET.powershell.bucket("anaconda3");
+            result = ET.scoop.installApp(bucket, "anaconda3");
             System.out.println(result);
         }
-
-        String git1 = ET.scoop.bucket("git");
-        System.out.println(git1);
     }
 }
