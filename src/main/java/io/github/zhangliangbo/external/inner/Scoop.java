@@ -9,6 +9,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
+ * https://www.modb.pro/db/499981
+ *
  * @author zhangliangbo
  * @since 2023/1/1
  */
@@ -34,8 +36,12 @@ public class Scoop extends AbstractExternalExecutable {
         while (true) {
             try {
                 Pair<Integer, String> pair = execute("install", app);
-                System.out.println(pair);
-                return pair.getRight();
+                boolean success = success(pair);
+                if (success) {
+                    return pair.getRight();
+                } else {
+                    System.out.printf("%s安装报错 开始重试 %s\n", app, ++times);
+                }
             } catch (Exception e) {
                 System.out.printf("安装报错 开始重试 %s\n", ++times);
                 TimeUnit.SECONDS.sleep(30);
@@ -59,7 +65,7 @@ public class Scoop extends AbstractExternalExecutable {
     public boolean bucketAdd(String bucket) throws Exception {
         int times = 10;
         while (times-- > 0) {
-            System.out.printf("开始添加%s %s次", bucket, times);
+            System.out.printf("开始添加%s %s次\n", bucket, times);
             Pair<Integer, String> execute = execute("bucket", "add", bucket);
             boolean success = success(execute);
             if (success) {
@@ -84,6 +90,22 @@ public class Scoop extends AbstractExternalExecutable {
             return false;
         }
         return Stream.of("error", "fatal").noneMatch(t -> pair.getRight().toLowerCase().contains(t));
+    }
+
+    /**
+     * https://ghproxy.com/
+     * https://toolwa.com/github/
+     */
+    public boolean proxy(String proxy) throws Exception {
+        Pair<Integer, String> execute = execute("config", "proxy", proxy);
+        return success(execute);
+    }
+
+    /**
+     * 默认 https://ghproxy.com/
+     */
+    public boolean proxy() throws Exception {
+        return proxy("https://ghproxy.com/");
     }
 
 }
