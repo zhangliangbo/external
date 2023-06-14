@@ -2,6 +2,7 @@ package io.github.zhangliangbo.external;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.zhangliangbo.external.inner.*;
+import io.github.zhangliangbo.external.task.Task;
 
 /**
  * @author zhangliangbo
@@ -23,4 +24,5 @@ public class ET {
     public static Cmd cmd = new Cmd();
     public static IO io = new IO();
     public static Powershell powershell = new Powershell();
+    public static Task task = new Task();
 }

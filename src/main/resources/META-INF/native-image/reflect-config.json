@@ -130,7 +130,8 @@
     {"name":"io"}, 
     {"name":"os"}, 
     {"name":"powershell"}, 
-    {"name":"scoop"}
+    {"name":"scoop"}, 
+    {"name":"task"}
   ]
 },
 {
@@ -185,6 +186,10 @@
     {"name":"installJdk","parameterTypes":[] }, 
     {"name":"search","parameterTypes":["java.lang.String"] }
   ]
+},
+{
+  "name":"io.github.zhangliangbo.external.task.Task",
+  "methods":[{"name":"deployNewMachine","parameterTypes":[] }]
 },
 {
   "name":"io.netty.buffer.AbstractByteBufAllocator",

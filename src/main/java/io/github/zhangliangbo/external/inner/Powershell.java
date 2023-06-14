@@ -24,11 +24,12 @@ public class Powershell extends AbstractExternalExecutable {
 
     /**
      * www.ipaddress.com
+     * raw.githubusercontent.com
      */
     public String installScoop() throws Exception {
         Pair<Integer, String> execute = execute(
                 "Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser;" +
-                        "[environment]::setEnvironmentVariable('SCOOP','D:\\scoop1','User');" +
+                        "[environment]::setEnvironmentVariable('SCOOP','D:\\scoop','User');" +
                         "irm get.scoop.sh | iex"
         );
         return execute.getRight();
