@@ -121,4 +121,9 @@ public class Scoop extends AbstractExternalExecutable {
         return success(execute);
     }
 
+    public String bucket(String app) throws Exception {
+        Pair<Integer, String> execute = execute(String.format("info %s | Select -ExpandProperty Bucket", app));
+        return execute.getRight();
+    }
+
 }

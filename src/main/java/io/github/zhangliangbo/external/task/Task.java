@@ -44,5 +44,8 @@ public class Task {
             result = ET.scoop.installApp("anaconda3");
             System.out.println(result);
         }
+
+        String git1 = ET.scoop.bucket("git");
+        System.out.println(git1);
     }
 }
