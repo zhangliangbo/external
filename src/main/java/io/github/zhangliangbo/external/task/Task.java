@@ -48,15 +48,16 @@ public class Task {
         String cmd = ET.powershell.commandSource("conda");
         if (StringUtils.isNotBlank(cmd)) {
             System.out.printf("%s已安装，跳过\n", "conda");
-            b = ET.conda.remove("notebook");
-            System.out.printf("移除%s结果%s\n", "notebook", b);
-            b = ET.conda.install("notebook=6.4.12");
-            System.out.printf("安装%s结果%s\n", "notebook=6.4.12", b);
 
             b = ET.conda.remove("jinja2");
             System.out.printf("移除%s结果%s\n", "jinja2", b);
             b = ET.conda.install("jinja2=3.0.3");
             System.out.printf("安装%s结果%s\n", "jinja2=3.0.3", b);
+
+            b = ET.conda.remove("notebook");
+            System.out.printf("移除%s结果%s\n", "notebook", b);
+            b = ET.conda.install("notebook=6.4.12");
+            System.out.printf("安装%s结果%s\n", "notebook=6.4.12", b);
 
             b = ET.conda.remove("kotlin-jupyter-kernel");
             System.out.printf("移除%s结果%s\n", "kotlin-jupyter-kernel", b);
