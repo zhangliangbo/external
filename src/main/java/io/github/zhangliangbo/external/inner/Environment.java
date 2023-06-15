@@ -91,12 +91,18 @@ public class Environment {
         configNode.set("cmd", jsonNode);
         //powershell
         try {
-            List<String> powershell = new Cmd().where("powershell");
-            if (CollectionUtils.isNotEmpty(powershell)) {
+            Cmd cmd = new Cmd();
+            List<String> list = cmd.where("powershell");
+            if (CollectionUtils.isNotEmpty(list)) {
                 jsonNode = new ObjectNode(JsonNodeFactory.instance);
-                jsonNode.put(OsType.Windows.getCode(), powershell.get(0));
+                jsonNode.put(OsType.Windows.getCode(), list.get(0));
                 configNode.set("powershell", jsonNode);
             }
+            Powershell powershell = new Powershell();
+            String conda = powershell.commandSource("conda");
+            jsonNode = new ObjectNode(JsonNodeFactory.instance);
+            jsonNode.put(OsType.Windows.getCode(), conda);
+            configNode.set("conda", jsonNode);
         } catch (Exception e) {
             //ignore
         }

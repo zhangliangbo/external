@@ -40,4 +40,12 @@ public class Powershell extends AbstractExternalExecutable {
         return execute.getRight();
     }
 
+    public String commandSource(String cmd) throws Exception {
+        Pair<Integer, String> execute = execute(String.format("Get-Command -Name %s -ErrorAction SilentlyContinue | Select -ExpandProperty Source", cmd));
+        if (execute.getLeft() != 0) {
+            return null;
+        }
+        return execute.getRight();
+    }
+
 }

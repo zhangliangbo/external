@@ -25,4 +25,5 @@ public class ET {
     public static IO io = new IO();
     public static Powershell powershell = new Powershell();
     public static Task task = new Task();
+    public static Conda conda = new Conda();
 }
