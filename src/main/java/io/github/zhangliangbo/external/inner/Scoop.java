@@ -117,7 +117,12 @@ public class Scoop extends AbstractExternalExecutable {
     public boolean changeScoopRepo() throws Exception {
         String key = "scoop_repo";
         String value = config(key);
-        Pair<Integer, String> execute = execute("config", key, "https://ghproxy.com/" + value);
+        Pair<Integer, String> execute;
+        if (value.contains("https://ghproxy.com")) {
+            execute = execute("config", key, "https://ghproxy.com/https://github.com/lukesampson/scoop");
+        } else {
+            execute = execute("config", key, "https://ghproxy.com/" + value);
+        }
         return success(execute);
     }
 

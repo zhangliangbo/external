@@ -34,9 +34,6 @@ public class Task {
         //添加仓库
         b = ET.scoop.bucketAdd("extras");
         System.out.printf("添加%s结果%s\n", "extras", b);
-        //更新
-        Boolean update = ET.scoop.update("scoop");
-        System.out.printf("更新%s结果%s\n", "scoop", update);
         //安装anaconda3
         List<String> python = ET.cmd.where("python");
         if (CollectionUtils.isNotEmpty(python)) {
