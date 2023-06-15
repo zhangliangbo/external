@@ -52,8 +52,24 @@ public class Task {
             System.out.printf("移除%s结果%s\n", "notebook", b);
             b = ET.conda.install("notebook=6.4.12");
             System.out.printf("安装%s结果%s\n", "notebook=6.4.12", b);
+
+            b = ET.conda.remove("jinja2");
+            System.out.printf("移除%s结果%s\n", "jinja2", b);
+            b = ET.conda.install("jinja2=3.0.3");
+            System.out.printf("安装%s结果%s\n", "jinja2=3.0.3", b);
+
+            b = ET.conda.remove("kotlin-jupyter-kernel");
+            System.out.printf("移除%s结果%s\n", "kotlin-jupyter-kernel", b);
+            b = ET.conda.installKotlinJupyterKernel();
+            System.out.printf("安装%s结果%s\n", "kotlin-jupyter-kernel", b);
+
+            b = ET.conda.remove("jupyter_contrib_nbextensions");
+            System.out.printf("移除%s结果%s\n", "jupyter_contrib_nbextensions", b);
+            b = ET.conda.installNbExtensions();
+            System.out.printf("安装%s结果%s\n", "jupyter_contrib_nbextensions", b);
         } else {
             System.out.println("命令为空");
         }
     }
+
 }

@@ -38,7 +38,17 @@ public class Conda extends AbstractExternalExecutable {
     }
 
     public Boolean install(String app) throws Exception {
-        Pair<Integer, String> execute = execute("install", app);
+        Pair<Integer, String> execute = execute("install", "-q", "-y", app);
+        return execute.getLeft() == 0;
+    }
+
+    public Boolean installKotlinJupyterKernel() throws Exception {
+        Pair<Integer, String> execute = execute("install", "-q", "-y", "-c", "jetbrains", "kotlin-jupyter-kernel");
+        return execute.getLeft() == 0;
+    }
+
+    public Boolean installNbExtensions() throws Exception {
+        Pair<Integer, String> execute = execute("install", "-q", "-y", "-c", "conda-forge", "jupyter_contrib_nbextensions");
         return execute.getLeft() == 0;
     }
 
