@@ -1,6 +1,7 @@
 package io.github.zhangliangbo.external.task;
 
 import io.github.zhangliangbo.external.ET;
+import io.github.zhangliangbo.external.inner.Environment;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -48,6 +49,7 @@ public class Task {
         String cmd = ET.powershell.commandSource("conda");
         if (StringUtils.isNotBlank(cmd)) {
             System.out.printf("%s已安装，跳过\n", "conda");
+            Environment.setExecutable("conda", cmd);
 
             b = ET.conda.remove("jinja2");
             System.out.printf("移除%s结果%s\n", "jinja2", b);
@@ -68,6 +70,17 @@ public class Task {
             System.out.printf("移除%s结果%s\n", "jupyter_contrib_nbextensions", b);
             b = ET.conda.installNbExtensions();
             System.out.printf("安装%s结果%s\n", "jupyter_contrib_nbextensions", b);
+
+            cmd = ET.powershell.commandSource("jupyter");
+            if (StringUtils.isNotBlank(cmd)) {
+                System.out.printf("%s已安装，跳过\n", "jupyter");
+                Environment.setExecutable("jupyter", cmd);
+
+                b = ET.jupyter.applyExtension();
+                System.out.printf("应用拓展结果%s\n", b);
+                b = ET.jupyter.enableExtension();
+                System.out.printf("启用拓展结果%s\n", b);
+            }
         } else {
             System.out.println("命令为空");
         }

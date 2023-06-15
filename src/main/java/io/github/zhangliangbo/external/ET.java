@@ -26,4 +26,5 @@ public class ET {
     public static Powershell powershell = new Powershell();
     public static Task task = new Task();
     public static Conda conda = new Conda();
+    public static Jupyter jupyter = new Jupyter();
 }

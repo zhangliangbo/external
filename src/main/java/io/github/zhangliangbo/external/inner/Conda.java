@@ -13,10 +13,6 @@ public class Conda extends AbstractExternalExecutable {
         return "conda";
     }
 
-    public static void main(String[] args) {
-
-    }
-
     public String version() throws Exception {
         Pair<Integer, String> execute = execute("--version");
         return execute.getRight();
@@ -24,7 +20,6 @@ public class Conda extends AbstractExternalExecutable {
 
     public String apps() throws Exception {
         Pair<Integer, String> execute = execute("list");
-        System.out.println(execute);
         return execute.getRight();
     }
 

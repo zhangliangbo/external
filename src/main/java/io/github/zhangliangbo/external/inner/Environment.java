@@ -99,10 +99,16 @@ public class Environment {
                 configNode.set("powershell", jsonNode);
             }
             Powershell powershell = new Powershell();
-            String conda = powershell.commandSource("conda");
+
+            String command = powershell.commandSource("conda");
             jsonNode = new ObjectNode(JsonNodeFactory.instance);
-            jsonNode.put(OsType.Windows.getCode(), conda);
+            jsonNode.put(OsType.Windows.getCode(), command);
             configNode.set("conda", jsonNode);
+
+            command = powershell.commandSource("jupyter");
+            jsonNode = new ObjectNode(JsonNodeFactory.instance);
+            jsonNode.put(OsType.Windows.getCode(), command);
+            configNode.set("jupyter", jsonNode);
         } catch (Exception e) {
             //ignore
         }
