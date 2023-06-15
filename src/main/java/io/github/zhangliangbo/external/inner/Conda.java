@@ -28,15 +28,13 @@ public class Conda extends AbstractExternalExecutable {
         return execute.getRight();
     }
 
-
     public Boolean remove(String app) throws Exception {
         Pair<Integer, String> execute = execute("remove", "-q", "-y", app);
         return execute.getLeft() == 0;
     }
 
-
     public Boolean install(String app) throws Exception {
-        Pair<Integer, String> execute = execute("install", "notebook=6.4.12");
+        Pair<Integer, String> execute = execute("install", app);
         return execute.getLeft() == 0;
     }
 
