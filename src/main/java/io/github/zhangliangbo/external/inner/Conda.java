@@ -30,7 +30,7 @@ public class Conda extends AbstractExternalExecutable {
 
     public Boolean remove(String app) throws Exception {
         Pair<Integer, String> execute = execute("remove", "-q", "-y", app);
-        return execute.getLeft() == 0 || notFound(execute.getRight());
+        return notFound(execute.getRight()) || execute.getLeft() == 0;
     }
 
     private Boolean notFound(String content) {

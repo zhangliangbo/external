@@ -36,8 +36,8 @@ public class Task {
         b = ET.scoop.bucketAdd("extras");
         System.out.printf("添加%s结果%s\n", "extras", b);
         //安装anaconda3
-        List<String> python = ET.cmd.where("python");
-        if (CollectionUtils.isNotEmpty(python)) {
+        List<String> conda = ET.cmd.where("conda");
+        if (CollectionUtils.isNotEmpty(conda)) {
             System.out.printf("%s已安装，跳过\n", "anaconda3");
         } else {
             String bucket = ET.powershell.bucket("anaconda3");
