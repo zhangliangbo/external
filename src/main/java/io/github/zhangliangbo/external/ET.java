@@ -27,4 +27,5 @@ public class ET {
     public static Task task = new Task();
     public static Conda conda = new Conda();
     public static Jupyter jupyter = new Jupyter();
+    public static Choco choco = new Choco();
 }

@@ -92,23 +92,33 @@ public class Environment {
         //powershell
         try {
             Cmd cmd = new Cmd();
-            List<String> list = cmd.where("powershell");
+
+            String name = "powershell";
+            List<String> list = cmd.where(name);
             if (CollectionUtils.isNotEmpty(list)) {
                 jsonNode = new ObjectNode(JsonNodeFactory.instance);
                 jsonNode.put(OsType.Windows.getCode(), list.get(0));
-                configNode.set("powershell", jsonNode);
+                configNode.set(name, jsonNode);
             }
             Powershell powershell = new Powershell();
 
-            String command = powershell.commandSource("conda");
+            name = "conda";
+            String command = powershell.commandSource(name);
             jsonNode = new ObjectNode(JsonNodeFactory.instance);
             jsonNode.put(OsType.Windows.getCode(), command);
-            configNode.set("conda", jsonNode);
+            configNode.set(name, jsonNode);
 
-            command = powershell.commandSource("jupyter");
+            name = "jupyter";
+            command = powershell.commandSource(name);
             jsonNode = new ObjectNode(JsonNodeFactory.instance);
             jsonNode.put(OsType.Windows.getCode(), command);
-            configNode.set("jupyter", jsonNode);
+            configNode.set(name, jsonNode);
+
+            name = "choco";
+            command = powershell.commandSource(name);
+            jsonNode = new ObjectNode(JsonNodeFactory.instance);
+            jsonNode.put(OsType.Windows.getCode(), command);
+            configNode.set(name, jsonNode);
         } catch (Exception e) {
             //ignore
         }
