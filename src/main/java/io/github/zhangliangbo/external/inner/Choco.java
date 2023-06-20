@@ -8,9 +8,16 @@ import org.apache.commons.lang3.tuple.Pair;
  */
 public class Choco extends AbstractExternalExecutable {
 
+    public static final String APP_DIR = "D:\\chocolatey";
+
     @Override
     public String getName() {
         return "choco";
+    }
+
+    public String version() throws Exception {
+        Pair<Integer, String> execute = execute("version");
+        return execute.getRight();
     }
 
     public boolean install(String app) throws Exception {

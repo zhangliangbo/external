@@ -13,8 +13,8 @@ public class Powershell extends AbstractExternalExecutable {
         return "powershell";
     }
 
-    public static void main(String[] args) {
-
+    public static void main(String[] args) throws Exception {
+        System.out.println(new Powershell().commandSource("java"));
     }
 
     public String version() throws Exception {
@@ -46,6 +46,16 @@ public class Powershell extends AbstractExternalExecutable {
             return null;
         }
         return execute.getRight();
+    }
+
+    public String getEnv(String key) throws Exception {
+        Pair<Integer, String> execute = execute(String.format("[Environment]::GetEnvironmentVariable('%s')", key));
+        return execute.getRight();
+    }
+
+    public Boolean setEnv(String key, String value) throws Exception {
+        Pair<Integer, String> execute = execute(String.format("[Environment]::SetEnvironmentVariable('%s','%s','User')", key, value));
+        return execute.getLeft() == 0;
     }
 
 }

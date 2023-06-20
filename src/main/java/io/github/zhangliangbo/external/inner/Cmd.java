@@ -35,4 +35,12 @@ public class Cmd extends AbstractExternalExecutable {
         return Stream.of(split).collect(Collectors.toList());
     }
 
+    public void restart(int delay) throws Exception {
+        execute("/c", "shutdown", "-r", "-t", String.valueOf(delay));
+    }
+
+    public void restart() throws Exception {
+        restart(15);
+    }
+
 }

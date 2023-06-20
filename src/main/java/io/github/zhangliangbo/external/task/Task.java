@@ -4,8 +4,14 @@ import io.github.zhangliangbo.external.ET;
 import io.github.zhangliangbo.external.inner.Environment;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 
+import java.io.File;
+import java.time.Duration;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 /**
  * @author zhangliangbo
@@ -83,6 +89,37 @@ public class Task {
             }
         } else {
             System.out.println("命令为空");
+        }
+    }
+
+    public void installGraalVmJdk() throws Exception {
+        File file = ET.http.download("https://download.oracle.com/graalvm/17/latest/graalvm-jdk-17_windows-x64_bin.zip");
+        Pair<Duration, File> pair = ET.io.extract(file.getAbsolutePath(), Environment.getHome().getAbsolutePath());
+        System.out.printf("解压时间%s\n", pair.getLeft());
+    }
+
+    public void installGraalVmJdkCe() throws Exception {
+        File file = ET.http.download("https://ghproxy.com/https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.2/graalvm-ce-java17-windows-amd64-22.3.2.zip");
+        System.out.printf("文件地址%s\n", file.getAbsolutePath());
+        Pair<Duration, File> pair = ET.io.extract(file.getAbsolutePath(), Environment.getHome().getAbsolutePath());
+        System.out.printf("解压时间%s\n", pair.getLeft());
+        System.out.printf("解压地址%s\n", pair.getRight());
+
+        String env = "JAVA_HOME";
+        Boolean res = ET.powershell.setEnv(env, pair.getRight().getAbsolutePath());
+        System.out.printf("设置环境变量%s %s\n", env, res);
+        env = "PATH";
+        String path = ET.powershell.getEnv(env);
+        if (StringUtils.isNotBlank(path)) {
+            String[] split = path.split(";");
+            String bin = pair.getRight().getAbsolutePath() + File.separator + "bin";
+            boolean contains = Arrays.asList(split).contains(bin);
+            if (!contains) {
+                path = path + ";" + bin;
+                res = ET.powershell.setEnv(env, path);
+                System.out.printf("设置环境变量%s %s\n", env, res);
+                ET.cmd.restart();
+            }
         }
     }
 

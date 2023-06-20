@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.github.zhangliangbo.external.ET;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -102,23 +103,29 @@ public class Environment {
             }
             Powershell powershell = new Powershell();
 
-            name = "conda";
-            String command = powershell.commandSource(name);
-            jsonNode = new ObjectNode(JsonNodeFactory.instance);
-            jsonNode.put(OsType.Windows.getCode(), command);
-            configNode.set(name, jsonNode);
+            String[] names = new String[]{"conda", "jupyter", "choco"};
 
-            name = "jupyter";
-            command = powershell.commandSource(name);
-            jsonNode = new ObjectNode(JsonNodeFactory.instance);
-            jsonNode.put(OsType.Windows.getCode(), command);
-            configNode.set(name, jsonNode);
+            for (String n : names) {
+                String command = powershell.commandSource(n);
+                jsonNode = new ObjectNode(JsonNodeFactory.instance);
+                jsonNode.put(OsType.Windows.getCode(), command);
+                configNode.set(n, jsonNode);
+            }
 
-            name = "choco";
-            command = powershell.commandSource(name);
-            jsonNode = new ObjectNode(JsonNodeFactory.instance);
-            jsonNode.put(OsType.Windows.getCode(), command);
-            configNode.set(name, jsonNode);
+            File file = new File(Choco.APP_DIR);
+            if (file.mkdirs()) {
+                Boolean env = powershell.setEnv("ChocolateyToolsLocation", Choco.APP_DIR);
+                System.out.printf("设置Chocolatey程序安装目录%s %s\n", Choco.APP_DIR, env);
+            }
+
+            //jdk
+            String env = powershell.getEnv(Jdk.JAVA_HOME_KEY);
+            if (StringUtils.isNotBlank(env)) {
+                name = "jdk";
+                jsonNode = new ObjectNode(JsonNodeFactory.instance);
+                jsonNode.put(OsType.Windows.getCode(), env);
+                configNode.set(name, jsonNode);
+            }
         } catch (Exception e) {
             //ignore
         }

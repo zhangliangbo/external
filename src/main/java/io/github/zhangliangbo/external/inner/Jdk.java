@@ -21,6 +21,8 @@ import java.util.Objects;
  */
 public class Jdk extends AbstractExternalExecutable {
 
+    public static final String JAVA_HOME_KEY = "JAVA_HOME";
+
     @Override
     public String getName() {
         return "jdk";
@@ -145,6 +147,31 @@ public class Jdk extends AbstractExternalExecutable {
     public Pair<Integer, JsonNode> flagsInitialLike(String keyword) throws Exception {
         Pair<Integer, String> pair = executeSub("java", "-XX:+PrintFlagsInitial", "-version");
         return processFlags(pair, keyword);
+    }
+
+    public String guInstall(String app) throws Exception {
+        Pair<Integer, String> pair = executeSub("gu", "install", app);
+        return pair.getRight();
+    }
+
+    public String guAvailable() throws Exception {
+        Pair<Integer, String> pair = executeSub("gu", "available");
+        return pair.getRight();
+    }
+
+    public String guVersion() throws Exception {
+        Pair<Integer, String> pair = executeSub("gu", "--version");
+        return pair.getRight();
+    }
+
+    public String guUpgrade(String app) throws Exception {
+        Pair<Integer, String> pair = executeSub("gu", "upgrade", app);
+        return pair.getRight();
+    }
+
+    public String guRemove(String app) throws Exception {
+        Pair<Integer, String> pair = executeSub("gu", "remove", app);
+        return pair.getRight();
     }
 
 }
