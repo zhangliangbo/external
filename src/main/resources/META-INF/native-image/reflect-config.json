@@ -128,6 +128,7 @@
     {"name":"git"}, 
     {"name":"http"}, 
     {"name":"io"}, 
+    {"name":"jdk"}, 
     {"name":"os"}, 
     {"name":"powershell"}, 
     {"name":"scoop"}, 
@@ -164,6 +165,10 @@
     {"name":"extract","parameterTypes":["java.lang.String"] }, 
     {"name":"extract","parameterTypes":["java.lang.String","java.lang.String"] }
   ]
+},
+{
+  "name":"io.github.zhangliangbo.external.inner.Jdk",
+  "methods":[{"name":"guVersion","parameterTypes":[] }]
 },
 {
   "name":"io.github.zhangliangbo.external.inner.Os",
