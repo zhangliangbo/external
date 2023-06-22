@@ -140,7 +140,7 @@ public class Task {
         String env = Kafka.HOME_KEY;
         Boolean res = ET.powershell.setEnv(env, pair.getRight().getAbsolutePath());
         System.out.printf("设置环境变量%s %s\n", env, res);
-        addPath(pair.getRight().getAbsolutePath() + File.separator + "bin");
+        ET.cmd.restart();
     }
 
 }

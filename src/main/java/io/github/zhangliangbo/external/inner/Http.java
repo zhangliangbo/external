@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.nio.channels.FileChannel;
 import java.time.Duration;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.LongAdder;
@@ -42,6 +43,18 @@ public class Http {
 
     public File download(String url, String dest, String sleepInterval) throws IOException {
         String name = FilenameUtils.getName(url);
+
+        if (Objects.isNull(name)) {
+            return null;
+        }
+
+        //查看本地是否有现成的文件
+        File localFile = searchLocal(name);
+        if (Objects.nonNull(localFile)) {
+            System.out.printf("本地有现成的文件无需下载 %s %s\n", url, localFile.getAbsolutePath());
+            return localFile;
+        }
+
         File destFile = new File(dest);
         if (destFile.isDirectory()) {
             FileUtils.forceMkdir(destFile);
@@ -129,4 +142,21 @@ public class Http {
         System.out.println();
     }
 
+    public File searchLocal(String fileName) {
+        File dir = new File(DEFAULT_DIR);
+        if (!dir.exists()) {
+            return null;
+        }
+        File[] files = dir.listFiles();
+        if (Objects.isNull(files)) {
+            return null;
+        }
+        for (File file : files) {
+            String name = FilenameUtils.getName(file.getAbsolutePath());
+            if (Objects.equals(name, fileName)) {
+                return file;
+            }
+        }
+        return null;
+    }
 }

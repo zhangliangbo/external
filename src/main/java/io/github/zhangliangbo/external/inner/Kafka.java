@@ -25,7 +25,7 @@ public class Kafka extends AbstractExternalExecutable {
 
     @Override
     public String autoDetect(Cmd cmd, Powershell powershell) throws Exception {
-        return super.autoDetect(cmd, powershell);
+        return powershell.getEnv(Kafka.HOME_KEY);
     }
 
     @Override
@@ -57,6 +57,9 @@ public class Kafka extends AbstractExternalExecutable {
         return execute.getRight();
     }
 
+    /**
+     * 根据配置文件母版新建一个配置文件
+     */
     public boolean newServerPropertyFile(File[] files, int[] id, int[] brokerPort, int[] controllerPort, File[] logs) throws Exception {
         File source = new File(getExecutableHome(), "config/kraft/server.properties");
         for (int i = 0; i < files.length; i++) {
@@ -109,6 +112,9 @@ public class Kafka extends AbstractExternalExecutable {
         return true;
     }
 
+    /**
+     * 内存映射文件技术修改文件
+     */
     public Boolean changeProperty(File file, String key, String value) throws IOException {
         RandomAccessFile randomAccessFile = new RandomAccessFile(file, "rw");
         FileChannel fileChannel = randomAccessFile.getChannel();
@@ -140,10 +146,16 @@ public class Kafka extends AbstractExternalExecutable {
         return Boolean.TRUE;
     }
 
+    /**
+     * 根据配置文件启动一个节点
+     */
     public void startOneNode(File file) throws Exception {
         executeSub(null, "kafka-server-start", null, -1, file.getAbsolutePath());
     }
 
+    /**
+     * 单机部署kraft集群
+     */
     public boolean deployKRaft() throws Exception {
         File[] configs = new File[]{
                 new File(getExecutableHome(), "config/kraft/server1.properties"),

@@ -129,6 +129,7 @@
     {"name":"http"}, 
     {"name":"io"}, 
     {"name":"jdk"}, 
+    {"name":"kafka"}, 
     {"name":"os"}, 
     {"name":"powershell"}, 
     {"name":"scoop"}, 
@@ -179,6 +180,13 @@
   "methods":[
     {"name":"guVersion","parameterTypes":[] }, 
     {"name":"version","parameterTypes":[] }
+  ]
+},
+{
+  "name":"io.github.zhangliangbo.external.inner.Kafka",
+  "methods":[
+    {"name":"deployKRaft","parameterTypes":[] }, 
+    {"name":"generateClusterID","parameterTypes":[] }
   ]
 },
 {
