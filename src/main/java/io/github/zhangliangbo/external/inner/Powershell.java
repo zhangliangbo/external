@@ -18,6 +18,9 @@ public class Powershell extends AbstractExternalExecutable {
 
     @Override
     public String autoDetect(Cmd cmd, Powershell powershell) throws Exception {
+        if (OsType.infer() == OsType.Unix) {
+            return "/usr/bin/pwsh";
+        }
         List<String> list = cmd.where(getName());
         if (CollectionUtils.isEmpty(list)) {
             return null;

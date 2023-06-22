@@ -52,7 +52,6 @@ public abstract class AbstractExternalExecutable implements ExternalExecutable {
     }
 
     protected String searchExecutable(File root, String name) throws Exception {
-        System.out.println(root.getAbsolutePath());
         File[] files = root.listFiles();
         if (files != null) {
             List<String> extensions = new LinkedList<>();
@@ -61,6 +60,8 @@ public abstract class AbstractExternalExecutable implements ExternalExecutable {
                 extensions.add(".exe");
                 extensions.add(".cmd");
                 extensions.add(".bat");
+            } else if (infer == OsType.Unix) {
+                extensions.add(".sh");
             }
             for (File file : files) {
                 String fileName = FilenameUtils.getName(file.getAbsolutePath());

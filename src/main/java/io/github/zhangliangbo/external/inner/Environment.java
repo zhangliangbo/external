@@ -94,4 +94,18 @@ public class Environment {
         return home.get();
     }
 
+    public static File searchLocal(String name) {
+        File home = getHome();
+        File[] files = home.listFiles();
+        if (Objects.isNull(files)) {
+            return null;
+        }
+        for (File file : files) {
+            if (file.getName().contains(name)) {
+                return file;
+            }
+        }
+        return null;
+    }
+
 }

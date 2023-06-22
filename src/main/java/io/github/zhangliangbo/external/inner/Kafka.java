@@ -1,5 +1,7 @@
 package io.github.zhangliangbo.external.inner;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.text.StringEscapeUtils;
 
@@ -8,6 +10,7 @@ import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -25,6 +28,12 @@ public class Kafka extends AbstractExternalExecutable {
 
     @Override
     public String autoDetect(Cmd cmd, Powershell powershell) throws Exception {
+        if (OsType.infer() == OsType.Unix) {
+            File file = Environment.searchLocal(getName());
+            if (Objects.nonNull(file)) {
+                return file.getAbsolutePath();
+            }
+        }
         return powershell.getEnv(Kafka.HOME_KEY);
     }
 
@@ -171,6 +180,11 @@ public class Kafka extends AbstractExternalExecutable {
                 new File(getExecutableHome(), "data/log2"),
                 new File(getExecutableHome(), "data/log3")
         };
+        //删除旧的数据文件，不然启动失败
+        for (File log : logs) {
+            System.out.printf("删除数据目录 %s\n", log.getAbsolutePath());
+            FileUtils.forceDelete(log);
+        }
         boolean res = newServerPropertyFile(configs, id, brokerPort, controllerPort, logs);
         if (!res) {
             throw new Exception("创建配置文件失败");
@@ -203,9 +217,7 @@ public class Kafka extends AbstractExternalExecutable {
     }
 
     public String metadataQuorum() throws Exception {
-        Pair<Integer, String> pair = executeSub(null, "kafka-metadata-quorum", "", 0,
-                "--bootstrap-server", servers(),
-                "describe", "--status");
+        Pair<Integer, String> pair = executeSub("kafka-metadata-quorum", "describe", "--status");
         return pair.getRight();
     }
 

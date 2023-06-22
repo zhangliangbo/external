@@ -4,6 +4,7 @@ import io.github.zhangliangbo.external.ET;
 import io.github.zhangliangbo.external.inner.Environment;
 import io.github.zhangliangbo.external.inner.Jdk;
 import io.github.zhangliangbo.external.inner.Kafka;
+import io.github.zhangliangbo.external.inner.OsType;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -125,7 +126,9 @@ public class Task {
         path = path + ";" + newPath;
         Boolean res = ET.powershell.setEnv(env, path);
         System.out.printf("设置环境变量%s %s\n", env, res);
-        ET.cmd.restart();
+        if (OsType.infer() == OsType.Windows) {
+            ET.cmd.restart();
+        }
     }
 
     /**
@@ -137,10 +140,12 @@ public class Task {
         System.out.printf("解压时间%s\n", pair.getLeft());
         System.out.printf("解压地址%s\n", pair.getRight());
 
-        String env = Kafka.HOME_KEY;
-        Boolean res = ET.powershell.setEnv(env, pair.getRight().getAbsolutePath());
-        System.out.printf("设置环境变量%s %s\n", env, res);
-        ET.cmd.restart();
+        if (OsType.infer() == OsType.Windows) {
+            String env = Kafka.HOME_KEY;
+            Boolean res = ET.powershell.setEnv(env, pair.getRight().getAbsolutePath());
+            System.out.printf("设置环境变量%s %s\n", env, res);
+            ET.cmd.restart();
+        }
     }
 
 }
