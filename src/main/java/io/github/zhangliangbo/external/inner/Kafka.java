@@ -155,6 +155,7 @@ public class Kafka extends AbstractExternalExecutable {
 
     /**
      * 单机部署kraft集群
+     * window无法启动
      */
     public boolean deployKRaft() throws Exception {
         File[] configs = new File[]{
