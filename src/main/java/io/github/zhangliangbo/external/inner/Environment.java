@@ -45,8 +45,8 @@ public class Environment {
             System.err.printf("加载内置配置文件报错 %s", e);
         }
 
-        if (!home.get().exists()) {
-            if (!home.get().mkdirs()) {
+        if (!getHome().exists()) {
+            if (!getHome().mkdirs()) {
                 System.err.println("创建主目录失败");
             }
         }
