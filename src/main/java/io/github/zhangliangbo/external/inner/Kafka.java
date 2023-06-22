@@ -16,9 +16,16 @@ import java.util.concurrent.CompletableFuture;
  */
 public class Kafka extends AbstractExternalExecutable {
 
+    public static final String HOME_KEY = "KAFKA_HOME";
+
     @Override
     public String getName() {
         return "kafka";
+    }
+
+    @Override
+    public String autoDetect(Cmd cmd, Powershell powershell) throws Exception {
+        return super.autoDetect(cmd, powershell);
     }
 
     @Override
@@ -34,15 +41,19 @@ public class Kafka extends AbstractExternalExecutable {
         return searchExecutable(root, name);
     }
 
+    /**
+     * 生成集群id
+     */
     public String generateClusterID() throws Exception {
-        Pair<Integer, String> execute = executeSub(null, "kafka-storage", null, 0, "random-uuid");
+        Pair<Integer, String> execute = executeSub("kafka-storage", "random-uuid");
         return execute.getRight();
     }
 
+    /**
+     * 格式化存储目录
+     */
     public String formatStorageDirectories(String clusterId, File configFile) throws Exception {
-        Pair<Integer, String> execute = executeSub(null, "kafka-storage",
-                null, 0,
-                "format", "-t", clusterId, "-c", configFile.getAbsolutePath(), "--ignore-formatted");
+        Pair<Integer, String> execute = executeSub("kafka-storage", "format", "-t", clusterId, "-c", configFile.getAbsolutePath(), "--ignore-formatted");
         return execute.getRight();
     }
 

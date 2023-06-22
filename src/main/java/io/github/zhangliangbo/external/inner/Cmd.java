@@ -40,7 +40,7 @@ public class Cmd extends AbstractExternalExecutable {
         }
         String right = pair.getRight();
         String[] split = right.split("\n");
-        return Stream.of(split).collect(Collectors.toList());
+        return Stream.of(split).filter(t -> Stream.of("exe", "cmd").anyMatch(t::endsWith)).collect(Collectors.toList());
     }
 
     public void restart(int delay) throws Exception {

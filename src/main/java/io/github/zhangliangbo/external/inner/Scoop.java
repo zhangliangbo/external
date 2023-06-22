@@ -1,5 +1,6 @@
 package io.github.zhangliangbo.external.inner;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.LinkedList;
@@ -19,6 +20,15 @@ public class Scoop extends AbstractExternalExecutable {
     @Override
     public String getName() {
         return "scoop";
+    }
+
+    @Override
+    public String autoDetect(Cmd cmd, Powershell powershell) throws Exception {
+        List<String> list = cmd.where(getName());
+        if (CollectionUtils.isEmpty(list)) {
+            return null;
+        }
+        return list.get(0);
     }
 
     public String apps() throws Exception {

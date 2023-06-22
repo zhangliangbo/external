@@ -21,7 +21,7 @@ import java.util.Objects;
  */
 public class Jdk extends AbstractExternalExecutable {
 
-    public static final String JAVA_HOME_KEY = "JAVA_HOME";
+    public static final String HOME_KEY = "JAVA_HOME";
 
     @Override
     public String getName() {
@@ -33,7 +33,7 @@ public class Jdk extends AbstractExternalExecutable {
         String autoDetect = super.autoDetect(cmd, powershell, "java");
         if (StringUtils.isBlank(autoDetect)) {
             //查不到用JAVA_HOME
-            return powershell.getEnv(Jdk.JAVA_HOME_KEY);
+            return powershell.getEnv(Jdk.HOME_KEY);
         }
         File file = new File(autoDetect);
         File bin = file.getParentFile();

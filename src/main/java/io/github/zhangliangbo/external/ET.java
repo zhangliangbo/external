@@ -28,4 +28,5 @@ public class ET {
     public static Conda conda = new Conda();
     public static Jupyter jupyter = new Jupyter();
     public static Choco choco = new Choco();
+    public static WinGet winget = new WinGet();
 }

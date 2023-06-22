@@ -132,7 +132,15 @@
     {"name":"os"}, 
     {"name":"powershell"}, 
     {"name":"scoop"}, 
-    {"name":"task"}
+    {"name":"task"}, 
+    {"name":"winget"}
+  ]
+},
+{
+  "name":"io.github.zhangliangbo.external.WinGet",
+  "methods":[
+    {"name":"search","parameterTypes":["java.lang.String"] }, 
+    {"name":"version","parameterTypes":[] }
   ]
 },
 {
@@ -197,7 +205,10 @@
 },
 {
   "name":"io.github.zhangliangbo.external.task.Task",
-  "methods":[{"name":"deployNewMachine","parameterTypes":[] }]
+  "methods":[
+    {"name":"deployNewMachine","parameterTypes":[] }, 
+    {"name":"installKafka","parameterTypes":[] }
+  ]
 },
 {
   "name":"io.netty.buffer.AbstractByteBufAllocator",

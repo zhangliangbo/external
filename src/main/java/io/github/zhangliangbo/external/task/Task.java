@@ -2,6 +2,8 @@ package io.github.zhangliangbo.external.task;
 
 import io.github.zhangliangbo.external.ET;
 import io.github.zhangliangbo.external.inner.Environment;
+import io.github.zhangliangbo.external.inner.Jdk;
+import io.github.zhangliangbo.external.inner.Kafka;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -10,14 +12,15 @@ import java.io.File;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Stream;
 
 /**
  * @author zhangliangbo
  * @since 2023/6/14
  */
 public class Task {
+    /**
+     * 部署新的机器
+     */
     public void deployNewMachine() throws Exception {
         String result;
         List<String> scoop = ET.cmd.where("scoop");
@@ -92,12 +95,9 @@ public class Task {
         }
     }
 
-    public void installGraalVmJdk() throws Exception {
-        File file = ET.http.download("https://download.oracle.com/graalvm/17/latest/graalvm-jdk-17_windows-x64_bin.zip");
-        Pair<Duration, File> pair = ET.io.extract(file.getAbsolutePath(), Environment.getHome().getAbsolutePath());
-        System.out.printf("解压时间%s\n", pair.getLeft());
-    }
-
+    /**
+     * 安装graalvm17社区版本
+     */
     public void installGraalVmJdkCe() throws Exception {
         File file = ET.http.download("https://ghproxy.com/https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.2/graalvm-ce-java17-windows-amd64-22.3.2.zip");
         System.out.printf("文件地址%s\n", file.getAbsolutePath());
@@ -105,22 +105,42 @@ public class Task {
         System.out.printf("解压时间%s\n", pair.getLeft());
         System.out.printf("解压地址%s\n", pair.getRight());
 
-        String env = "JAVA_HOME";
+        String env = Jdk.HOME_KEY;
         Boolean res = ET.powershell.setEnv(env, pair.getRight().getAbsolutePath());
         System.out.printf("设置环境变量%s %s\n", env, res);
-        env = "PATH";
+        addPath(pair.getRight().getAbsolutePath() + File.separator + "bin");
+    }
+
+    private void addPath(String newPath) throws Exception {
+        String env = "PATH";
         String path = ET.powershell.getEnv(env);
-        if (StringUtils.isNotBlank(path)) {
-            String[] split = path.split(";");
-            String bin = pair.getRight().getAbsolutePath() + File.separator + "bin";
-            boolean contains = Arrays.asList(split).contains(bin);
-            if (!contains) {
-                path = path + ";" + bin;
-                res = ET.powershell.setEnv(env, path);
-                System.out.printf("设置环境变量%s %s\n", env, res);
-                ET.cmd.restart();
-            }
+        if (StringUtils.isBlank(path)) {
+            return;
         }
+        String[] split = path.split(";");
+        boolean contains = Arrays.asList(split).contains(newPath);
+        if (contains) {
+            return;
+        }
+        path = path + ";" + newPath;
+        Boolean res = ET.powershell.setEnv(env, path);
+        System.out.printf("设置环境变量%s %s\n", env, res);
+        ET.cmd.restart();
+    }
+
+    /**
+     * 安装kafka
+     */
+    public void installKafka() throws Exception {
+        File file = ET.http.download("https://downloads.apache.org/kafka/3.5.0/kafka_2.13-3.5.0.tgz");
+        Pair<Duration, File> pair = ET.io.extract(file.getAbsolutePath(), Environment.getHome().getAbsolutePath());
+        System.out.printf("解压时间%s\n", pair.getLeft());
+        System.out.printf("解压地址%s\n", pair.getRight());
+
+        String env = Kafka.HOME_KEY;
+        Boolean res = ET.powershell.setEnv(env, pair.getRight().getAbsolutePath());
+        System.out.printf("设置环境变量%s %s\n", env, res);
+        addPath(pair.getRight().getAbsolutePath() + File.separator + "bin");
     }
 
 }
