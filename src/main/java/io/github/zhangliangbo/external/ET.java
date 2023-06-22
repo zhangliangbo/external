@@ -29,4 +29,5 @@ public class ET {
     public static Jupyter jupyter = new Jupyter();
     public static Choco choco = new Choco();
     public static WinGet winget = new WinGet();
+    public static RocketMq rocketmq = new RocketMq();
 }

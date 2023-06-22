@@ -1,4 +1,4 @@
-package io.github.zhangliangbo.external;
+package io.github.zhangliangbo.external.inner;
 
 import io.github.zhangliangbo.external.inner.AbstractExternalExecutable;
 import io.github.zhangliangbo.external.inner.Powershell;
