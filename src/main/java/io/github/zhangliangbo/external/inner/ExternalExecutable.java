@@ -22,6 +22,10 @@ public interface ExternalExecutable {
 
     String getExecutable(String name) throws Exception;
 
+    String autoDetect(Cmd cmd, Powershell powershell, String name) throws Exception;
+
+    String autoDetect(Cmd cmd, Powershell powershell) throws Exception;
+
     default Pair<Integer, String> execute(Map<String, String> env, String directory, long timeout, String... args) throws Exception {
         return ET.exec.execute(env, getExecutable(), directory, timeout, args);
     }

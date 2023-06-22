@@ -168,7 +168,10 @@
 },
 {
   "name":"io.github.zhangliangbo.external.inner.Jdk",
-  "methods":[{"name":"guVersion","parameterTypes":[] }]
+  "methods":[
+    {"name":"guVersion","parameterTypes":[] }, 
+    {"name":"version","parameterTypes":[] }
+  ]
 },
 {
   "name":"io.github.zhangliangbo.external.inner.Os",

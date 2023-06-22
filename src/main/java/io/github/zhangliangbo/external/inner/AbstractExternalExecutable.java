@@ -1,6 +1,7 @@
 package io.github.zhangliangbo.external.inner;
 
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.util.*;
@@ -20,7 +21,7 @@ public abstract class AbstractExternalExecutable implements ExternalExecutable {
         if (map.containsKey(infer)) {
             executableFile = map.get(infer);
         } else {
-            String executable = Environment.getExecutable(getName(), infer.getCode());
+            String executable = Environment.getExecutable(this, infer.getCode());
             if (Objects.nonNull(executable)) {
                 executableFile = new File(executable);
             }
@@ -74,6 +75,16 @@ public abstract class AbstractExternalExecutable implements ExternalExecutable {
             }
         }
         throw new Exception(String.format("%s未找到", name));
+    }
+
+    @Override
+    public String autoDetect(Cmd cmd, Powershell powershell, String name) throws Exception {
+        return powershell.commandSource(StringUtils.isBlank(name) ? getName() : name);
+    }
+
+    @Override
+    public String autoDetect(Cmd cmd, Powershell powershell) throws Exception {
+        return autoDetect(cmd, powershell, getName());
     }
 
 }

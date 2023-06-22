@@ -29,6 +29,18 @@ public class Jdk extends AbstractExternalExecutable {
     }
 
     @Override
+    public String autoDetect(Cmd cmd, Powershell powershell) throws Exception {
+        String autoDetect = super.autoDetect(cmd, powershell, "java");
+        if (StringUtils.isBlank(autoDetect)) {
+            //查不到用JAVA_HOME
+            return powershell.getEnv(Jdk.JAVA_HOME_KEY);
+        }
+        File file = new File(autoDetect);
+        File bin = file.getParentFile();
+        return bin.getParent();
+    }
+
+    @Override
     public String getExecutable(String name) throws Exception {
         String directory = super.getExecutable(name);
         File root = new File(directory, "bin");

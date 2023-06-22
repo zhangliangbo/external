@@ -1,6 +1,9 @@
 package io.github.zhangliangbo.external.inner;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.tuple.Pair;
+
+import java.util.List;
 
 /**
  * @author zhangliangbo
@@ -11,6 +14,15 @@ public class Powershell extends AbstractExternalExecutable {
     @Override
     public String getName() {
         return "powershell";
+    }
+
+    @Override
+    public String autoDetect(Cmd cmd, Powershell powershell) throws Exception {
+        List<String> list = cmd.where(getName());
+        if (CollectionUtils.isEmpty(list)) {
+            return null;
+        }
+        return list.get(0);
     }
 
     public static void main(String[] args) throws Exception {

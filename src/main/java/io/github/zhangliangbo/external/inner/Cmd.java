@@ -1,7 +1,10 @@
 package io.github.zhangliangbo.external.inner;
 
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -15,6 +18,11 @@ public class Cmd extends AbstractExternalExecutable {
     @Override
     public String getName() {
         return "cmd";
+    }
+
+    @Override
+    public String autoDetect(Cmd cmd, Powershell powershell) throws Exception {
+        return System.getenv("SystemRoot") + File.separator + "System32" + File.separator + "cmd.exe";
     }
 
     public String echo(String variable) throws Exception {

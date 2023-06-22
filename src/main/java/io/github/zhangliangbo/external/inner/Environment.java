@@ -4,13 +4,11 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import io.github.zhangliangbo.external.ET;
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -22,11 +20,11 @@ public class Environment {
 
     private static final ObjectNode configNode = new ObjectNode(JsonNodeFactory.instance);
     private static final AtomicReference<File> home = new AtomicReference<>(new File(System.getProperty("user.home"), "external"));
+    private static final Cmd cmd = new Cmd();
+    private static final Powershell powershell = new Powershell();
 
     static {
         try {
-            initExecutable();
-
             String userHome = System.getProperty("user.home");
             File configFile = new File(userHome, ".external.json");
             if (configFile.exists()) {
@@ -63,10 +61,21 @@ public class Environment {
         jsonNode.put(OsType.infer().getCode(), executable);
     }
 
-    public static String getExecutable(String name, String os) {
-        JsonNode jsonNode = configNode.get(name);
+    public static String getExecutable(ExternalExecutable externalExecutable, String os) throws Exception {
+        JsonNode jsonNode = configNode.get(externalExecutable.getName());
         if (Objects.isNull(jsonNode)) {
-            return null;
+            //没有注册，则自动检测
+            String executable = externalExecutable.autoDetect(cmd, powershell);
+            //自动检测不到，就说明没有
+            if (StringUtils.isBlank(executable)) {
+                return null;
+            }
+            //缓存起来
+            ObjectNode objectNode = new ObjectNode(JsonNodeFactory.instance);
+            objectNode.put(OsType.infer().getCode(), executable);
+            configNode.set(externalExecutable.getName(), objectNode);
+            //指定可执行文件
+            jsonNode = objectNode;
         }
         ObjectNode objectNode = (ObjectNode) jsonNode;
         JsonNode executable = objectNode.get(os);
@@ -83,53 +92,6 @@ public class Environment {
 
     public static File getHome() {
         return home.get();
-    }
-
-    private static void initExecutable() {
-        //cmd
-        ObjectNode jsonNode = new ObjectNode(JsonNodeFactory.instance);
-        jsonNode.put(OsType.Windows.getCode(), "C:\\Windows\\System32\\cmd.exe");
-        configNode.set("cmd", jsonNode);
-        //powershell
-        try {
-            Cmd cmd = new Cmd();
-
-            String name = "powershell";
-            List<String> list = cmd.where(name);
-            if (CollectionUtils.isNotEmpty(list)) {
-                jsonNode = new ObjectNode(JsonNodeFactory.instance);
-                jsonNode.put(OsType.Windows.getCode(), list.get(0));
-                configNode.set(name, jsonNode);
-            }
-            Powershell powershell = new Powershell();
-
-            String[] names = new String[]{"conda", "jupyter", "choco"};
-
-            for (String n : names) {
-                String command = powershell.commandSource(n);
-                jsonNode = new ObjectNode(JsonNodeFactory.instance);
-                jsonNode.put(OsType.Windows.getCode(), command);
-                configNode.set(n, jsonNode);
-            }
-
-            File file = new File(Choco.APP_DIR);
-            if (file.mkdirs()) {
-                Boolean env = powershell.setEnv("ChocolateyToolsLocation", Choco.APP_DIR);
-                System.out.printf("设置Chocolatey程序安装目录%s %s\n", Choco.APP_DIR, env);
-            }
-
-            //jdk
-            String env = powershell.getEnv(Jdk.JAVA_HOME_KEY);
-            if (StringUtils.isNotBlank(env)) {
-                name = "jdk";
-                jsonNode = new ObjectNode(JsonNodeFactory.instance);
-                jsonNode.put(OsType.Windows.getCode(), env);
-                configNode.set(name, jsonNode);
-            }
-        } catch (Exception e) {
-            //ignore
-        }
-
     }
 
 }
