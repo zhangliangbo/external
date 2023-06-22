@@ -18,6 +18,11 @@ public class Wsl extends AbstractExternalExecutable {
         return "wsl";
     }
 
+    public String update() throws Exception {
+        Pair<Integer, String> execute = execute("--update");
+        return execute.getRight();
+    }
+
     public Pair<Integer, String> executeInWsl(Map<String, String> env, String executable, String directory, long timeout, String... args) throws Exception {
         String[] newArgs = ArrayUtils.addFirst(args, executable);
         return ET.exec.execute(env, getExecutable(), directory, timeout, newArgs);

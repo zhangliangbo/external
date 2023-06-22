@@ -135,7 +135,8 @@
     {"name":"rocketmq"}, 
     {"name":"scoop"}, 
     {"name":"task"}, 
-    {"name":"winget"}
+    {"name":"winget"}, 
+    {"name":"wsl"}
   ]
 },
 {
@@ -214,6 +215,12 @@
     {"name":"apps","parameterTypes":[] }, 
     {"name":"installJdk","parameterTypes":[] }, 
     {"name":"search","parameterTypes":["java.lang.String"] }
+  ]
+},
+{
+  "name":"io.github.zhangliangbo.external.inner.Wsl",
+  "methods":[
+    {"name":"update","parameterTypes":[] }
   ]
 },
 {

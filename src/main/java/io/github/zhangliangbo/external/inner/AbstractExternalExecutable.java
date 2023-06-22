@@ -62,6 +62,7 @@ public abstract class AbstractExternalExecutable implements ExternalExecutable {
                 extensions.add(".bat");
             } else if (infer == OsType.Unix) {
                 extensions.add(".sh");
+                extensions.add("");
             }
             for (File file : files) {
                 String fileName = FilenameUtils.getName(file.getAbsolutePath());
