@@ -48,7 +48,7 @@ public class Cmd extends AbstractExternalExecutable {
     }
 
     public void restart() throws Exception {
-        restart(15);
+        restart(30);
     }
 
 }

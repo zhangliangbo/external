@@ -11,6 +11,8 @@ import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author zhangliangbo
@@ -144,11 +146,9 @@ public class Task {
             return;
         }
         String[] split = path.split(";");
-        boolean contains = Arrays.asList(split).contains(newPath);
-        if (contains) {
-            return;
-        }
-        path = path + ";" + newPath;
+        Set<String> set = Arrays.stream(split).collect(Collectors.toSet());
+        set.add(newPath);
+        path = String.join(";", set);
         Boolean res = ET.powershell.setEnv(env, path);
         System.out.printf("设置环境变量%s %s\n", env, res);
         if (OsType.infer() == OsType.Windows) {
