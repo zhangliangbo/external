@@ -148,7 +148,7 @@ public class Task {
         String[] split = path.split(";");
         Set<String> set = Arrays.stream(split).collect(Collectors.toSet());
         set.add(newPath);
-        path = String.join(";", set);
+        path = set.stream().sorted().collect(Collectors.joining(";"));
         Boolean res = ET.powershell.setEnv(env, path);
         System.out.printf("设置环境变量%s %s\n", env, res);
         if (OsType.infer() == OsType.Windows) {
