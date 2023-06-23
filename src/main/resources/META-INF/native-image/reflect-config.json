@@ -219,15 +219,15 @@
 },
 {
   "name":"io.github.zhangliangbo.external.inner.Wsl",
-  "methods":[
-    {"name":"update","parameterTypes":[] }
-  ]
+  "methods":[{"name":"update","parameterTypes":[] }]
 },
 {
   "name":"io.github.zhangliangbo.external.task.Task",
   "methods":[
     {"name":"deployNewMachine","parameterTypes":[] }, 
+    {"name":"installGraalVmJdkCe","parameterTypes":[] }, 
     {"name":"installKafka","parameterTypes":[] }, 
+    {"name":"installOpenJdk8","parameterTypes":[] }, 
     {"name":"installRocketMq","parameterTypes":[] }
   ]
 },

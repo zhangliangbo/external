@@ -10,6 +10,7 @@ import java.io.File;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author zhangliangbo
@@ -93,20 +94,47 @@ public class Task {
         }
     }
 
+    public void installJdk(String url) throws Exception {
+        File file = ET.http.download(url);
+        System.out.printf("文件地址%s\n", file.getAbsolutePath());
+
+        String rootName = ET.io.rootName(file.getAbsolutePath());
+        File local = Environment.searchLocal(rootName);
+        if (Objects.isNull(local)) {
+            try {
+                Pair<Duration, File> pair = ET.io.extract(file.getAbsolutePath(), Environment.getHome().getAbsolutePath());
+                System.out.printf("解压时间 %s %s\n", pair.getLeft(), pair.getRight());
+
+                local = pair.getRight();
+            } catch (Exception e) {
+                //ignore
+            }
+        } else {
+            System.out.printf("本地文件已解压 %s\n", local.getAbsolutePath());
+        }
+
+        if (Objects.isNull(local)) {
+            return;
+        }
+
+        String env = Jdk.HOME_KEY;
+        Boolean res = ET.powershell.setEnv(env, local.getAbsolutePath());
+        System.out.printf("设置环境变量%s %s\n", env, res);
+        addPath("%" + Jdk.HOME_KEY + "%" + File.separator + "bin");
+    }
+
     /**
      * 安装graalvm17社区版本
      */
     public void installGraalVmJdkCe() throws Exception {
-        File file = ET.http.download("https://ghproxy.com/https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.2/graalvm-ce-java17-windows-amd64-22.3.2.zip");
-        System.out.printf("文件地址%s\n", file.getAbsolutePath());
-        Pair<Duration, File> pair = ET.io.extract(file.getAbsolutePath(), Environment.getHome().getAbsolutePath());
-        System.out.printf("解压时间%s\n", pair.getLeft());
-        System.out.printf("解压地址%s\n", pair.getRight());
+        installJdk("https://ghproxy.com/https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.2/graalvm-ce-java17-windows-amd64-22.3.2.zip");
+    }
 
-        String env = Jdk.HOME_KEY;
-        Boolean res = ET.powershell.setEnv(env, pair.getRight().getAbsolutePath());
-        System.out.printf("设置环境变量%s %s\n", env, res);
-        addPath(pair.getRight().getAbsolutePath() + File.separator + "bin");
+    /**
+     * 安装openjdk8版本
+     */
+    public void installOpenJdk8() throws Exception {
+        installJdk("https://download.java.net/openjdk/jdk8u43/ri/openjdk-8u43-windows-i586.zip");
     }
 
     private void addPath(String newPath) throws Exception {

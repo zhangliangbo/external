@@ -1,16 +1,7 @@
 package io.github.zhangliangbo.external.inner;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.tuple.Pair;
-import org.apache.commons.text.StringEscapeUtils;
-
-import java.io.*;
-import java.nio.MappedByteBuffer;
-import java.nio.channels.FileChannel;
-import java.util.LinkedList;
-import java.util.List;
+import java.io.File;
 import java.util.Objects;
-import java.util.concurrent.CompletableFuture;
 
 /**
  * @author zhangliangbo
@@ -47,5 +38,8 @@ public class RocketMq extends AbstractExternalExecutable {
         executeSub(null, "mqnamesrv", null, -1);
     }
 
+    public void startBrokerAndProxy() throws Exception {
+        executeSub(null, "mqbroker", null, -1, "-n", "localhost:9876", "--enable-proxy");
+    }
 
 }

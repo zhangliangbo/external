@@ -6,6 +6,7 @@ import org.apache.commons.compress.archivers.ArchiveStreamFactory;
 import org.apache.commons.compress.compressors.CompressorInputStream;
 import org.apache.commons.compress.compressors.CompressorStreamFactory;
 import org.apache.commons.compress.utils.IOUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.*;
@@ -69,9 +70,9 @@ public class IO {
             }
         }
 
-        org.apache.commons.io.IOUtils.closeQuietly(inputStream);
-        org.apache.commons.io.IOUtils.closeQuietly(compressorInputStream);
-        org.apache.commons.io.IOUtils.closeQuietly(archiveInputStream);
+        IOUtils.closeQuietly(inputStream);
+        IOUtils.closeQuietly(compressorInputStream);
+        IOUtils.closeQuietly(archiveInputStream);
 
         Instant e = Instant.now();
         return Pair.of(Duration.between(s, e), root);
@@ -80,6 +81,46 @@ public class IO {
     public Pair<Duration, File> extract(String file) throws Exception {
         String parent = new File(file).getParent();
         return extract(file, parent);
+    }
+
+    public String rootName(String file) throws Exception {
+        InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
+        CompressorInputStream compressorInputStream = null;
+        try {
+            CompressorStreamFactory.detect(inputStream);
+            compressorInputStream = new CompressorStreamFactory().createCompressorInputStream(inputStream);
+        } catch (Exception e) {
+            //ignore
+        }
+        ArchiveInputStream archiveInputStream = new ArchiveStreamFactory().createArchiveInputStream(Objects.isNull(compressorInputStream) ? inputStream : new BufferedInputStream(compressorInputStream));
+
+        int fileNameLength = Integer.MAX_VALUE;
+        String root = null;
+        try {
+            ArchiveEntry entry;
+            while (true) {
+                entry = archiveInputStream.getNextEntry();
+                if (Objects.isNull(entry)) {
+                    break;
+                }
+                String name = entry.getName();
+                if (name.length() < fileNameLength) {
+                    fileNameLength = name.length();
+                    root = name;
+                }
+            }
+            if (Objects.nonNull(root)) {
+                String[] split = root.split("/");
+                if (ArrayUtils.isNotEmpty(split)) {
+                    root = split[0];
+                }
+            }
+            return root;
+        } finally {
+            IOUtils.closeQuietly(inputStream);
+            IOUtils.closeQuietly(compressorInputStream);
+            IOUtils.closeQuietly(archiveInputStream);
+        }
     }
 
 }
