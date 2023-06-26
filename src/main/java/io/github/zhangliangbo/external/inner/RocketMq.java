@@ -60,6 +60,7 @@ public class RocketMq extends AbstractExternalExecutable {
 
     public void startAfterStop() throws Exception {
         stop();
+        System.out.println("睡眠等待5s开始");
         TimeUnit.SECONDS.sleep(5);
         start();
     }
@@ -74,6 +75,7 @@ public class RocketMq extends AbstractExternalExecutable {
         });
         CompletableFuture<Void> brokerCf = CompletableFuture.runAsync(() -> {
             try {
+                System.out.println("睡眠等待10s开始");
                 TimeUnit.SECONDS.sleep(10);
                 startBroker();
             } catch (Exception e) {
