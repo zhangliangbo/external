@@ -2,6 +2,8 @@ package io.github.zhangliangbo.external.inner;
 
 import java.io.File;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author zhangliangbo
@@ -48,6 +50,25 @@ public class RocketMq extends AbstractExternalExecutable {
 
     public void stopBroker() throws Exception {
         executeSub("mqshutdown", "broker");
+    }
+
+    public void start() throws Exception {
+        CompletableFuture<Void> nameServerCf = CompletableFuture.runAsync(() -> {
+            try {
+                startNameServer();
+            } catch (Exception e) {
+                //ignore
+            }
+        });
+        CompletableFuture<Void> brokerCf = CompletableFuture.runAsync(() -> {
+            try {
+                TimeUnit.SECONDS.sleep(5);
+                startBroker();
+            } catch (Exception e) {
+                //ignore
+            }
+        });
+        CompletableFuture.allOf(nameServerCf, brokerCf).join();
     }
 
     public void stop() throws Exception {

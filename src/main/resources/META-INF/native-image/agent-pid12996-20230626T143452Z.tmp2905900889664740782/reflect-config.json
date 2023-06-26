@@ -208,7 +208,9 @@
 {
   "name":"io.github.zhangliangbo.external.inner.RocketMq",
   "methods":[
-    {"name":"start","parameterTypes":[] },
+    {"name":"start","parameterTypes":[] }, 
+    {"name":"startBroker","parameterTypes":[] }, 
+    {"name":"startNameServer","parameterTypes":[] }, 
     {"name":"stop","parameterTypes":[] }
   ]
 },
