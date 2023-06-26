@@ -38,8 +38,21 @@ public class RocketMq extends AbstractExternalExecutable {
         executeSub(null, "mqnamesrv", null, -1);
     }
 
-    public void startBrokerAndProxy() throws Exception {
-        executeSub(null, "mqbroker", null, -1, "-n", "localhost:9876", "--enable-proxy");
+    public void startBroker() throws Exception {
+        executeSub(null, "mqbroker", null, -1, "-n", "localhost:9876");
+    }
+
+    public void stopNameServer() throws Exception {
+        executeSub("mqshutdown", "namesrv");
+    }
+
+    public void stopBroker() throws Exception {
+        executeSub("mqshutdown", "broker");
+    }
+
+    public void stop() throws Exception {
+        stopBroker();
+        stopNameServer();
     }
 
 }

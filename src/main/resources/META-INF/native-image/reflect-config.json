@@ -207,7 +207,11 @@
 },
 {
   "name":"io.github.zhangliangbo.external.inner.RocketMq",
-  "methods":[{"name":"startNameServer","parameterTypes":[] }]
+  "methods":[
+    {"name":"startBroker","parameterTypes":[] }, 
+    {"name":"startNameServer","parameterTypes":[] }, 
+    {"name":"stop","parameterTypes":[] }
+  ]
 },
 {
   "name":"io.github.zhangliangbo.external.inner.Scoop",
