@@ -36,10 +36,16 @@ public class RocketMq extends AbstractExternalExecutable {
         return searchExecutable(root, name);
     }
 
+    /**
+     * 单机部署时 修改堆大小为-Xmx256m -Xms256m -Xmn128m
+     */
     public void startNameServer() throws Exception {
         executeSub(null, "mqnamesrv", null, -1);
     }
 
+    /**
+     * 单机部署时 修改堆大小为-Xmx256m -Xms256m -Xmn128m
+     */
     public void startBroker() throws Exception {
         executeSub(null, "mqbroker", null, -1, "-n", "localhost:9876");
     }
@@ -52,6 +58,12 @@ public class RocketMq extends AbstractExternalExecutable {
         executeSub("mqshutdown", "broker");
     }
 
+    public void startAfterStop() throws Exception {
+        stop();
+        TimeUnit.SECONDS.sleep(5);
+        start();
+    }
+
     public void start() throws Exception {
         CompletableFuture<Void> nameServerCf = CompletableFuture.runAsync(() -> {
             try {
@@ -62,7 +74,7 @@ public class RocketMq extends AbstractExternalExecutable {
         });
         CompletableFuture<Void> brokerCf = CompletableFuture.runAsync(() -> {
             try {
-                TimeUnit.SECONDS.sleep(5);
+                TimeUnit.SECONDS.sleep(10);
                 startBroker();
             } catch (Exception e) {
                 //ignore
